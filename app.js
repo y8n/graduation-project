@@ -11,15 +11,16 @@ var express = require('express'),
 
 // 路由配置
 var index = require('./routes/index');
+var user  = require('./routes/user');
+var movie = require('./routes/movie');
 
-var routes = [index];
+var routes = [index,user,movie];
 
 var port = process.env.PORT || 3000;
 var app = express();
 
 // uncomment after placing your favicon in /public
-// app.use(favicon(__dirname + '/public/favicon.ico'));
-
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.set('views','./views/pages');
 app.set('view engine','jade');
 app.use(bodyParser.json());
