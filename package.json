@@ -1,0 +1,17 @@
+{
+  "name": "graduation-project",
+  "version": "1.0.0",
+  "description": "my graduation project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongodb",
+    "movie"
+  ],
+  "author": "YangJiyuan",
+  "license": "MIT"
+}
