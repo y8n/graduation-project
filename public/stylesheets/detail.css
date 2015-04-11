@@ -1,0 +1,22 @@
+i.icon-num {
+	background: red;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+}
+img.sub-img{
+	width: 80px;
+	height: 100px;
+}
+.hot-movie-content{
+	width: 200px;
+	height: 100px;
+	position: relative;
+	left: 20px;
+	margin-left: 80px;
+}
