@@ -1,0 +1,66 @@
+.container
+  .row
+    .navbar.navbar-default
+      .navbar-header
+        a.navbar-brand(href="javascript:void(0);") Movies
+      div.navbar-collapse.collapse
+        ul.nav.navbar-nav
+          li
+            a(href="/") 首页
+          li
+            a(href="/admin/movie") 添加新电影
+          if user && user.role > 10
+            li
+              a(href="/admin/movie/list?p=1") 所有电影列表
+            li
+              a(href="/user/list?p=1") 用户列表
+            li
+              a(href="/admin/category/list") 电影类型管理
+        if user
+          ul.nav.navbar-nav.navbar-right
+            li.active
+              a(href="#") 欢迎您,#{user.username}
+            li
+              a(href="/logout") 登出
+        else
+          form.navbar-form.navbar-right(method="post",action="/user/signin")
+            .form-group
+              input.form-control(type="text",name="username",placeholder="Username")
+            .form-group
+              input.form-control(type="password",name="password",placeholder="Password")
+            button.btn.btn-primary(type="submit") 登录
+            button.btn.btn-primary(type="button",data-toggle="modal",data-target="#signupModal") 注册
+    h1= title
+    form(method="get",action="/results",style="top:-50px;position:relative")
+      .input-group.col-sm-4.pull-right
+        input.form-control(type="text",name="q",placeholder='请输入搜索电影关键词')
+        span.input-group-btn
+          button.btn.btn-primary(type="submit") 搜索
+
+#signupModal.modal
+  .modal-dialog(style="width:300px")
+    .modal-content
+      form(method="post",action="/user/signup")
+        .modal-header  
+          a.close(href="#",data-dismiss='modal') x
+          h4 注册
+        .modal-body
+          .form-group
+            label(for="signupName") 用户名 
+            input#signupName.form-control(name="username",type="text")
+          .form-group
+            label(for="signupPassword") 密码
+            input#signupPassword.form-control(name="password",type="password")
+          .form-group
+            label(for="signupRePassword") 确认密码
+            input#signupRePassword.form-control(name="rePassword",type="password")
+          .alert.alert-block.alert-danger(style='display:none;')
+        .modal-footer
+          button.btn(type="button",data-dismiss="modal") 关闭
+          button#signupbtn.btn.btn-primary(type="button") 注册
+
+
+
+
+
+
