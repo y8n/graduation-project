@@ -1,7 +1,7 @@
 var mongodb = require('mongodb'),
-	DB = require('./DB'),
 	MongoClient = mongodb.MongoClient,
 	ObjectID = mongodb.ObjectID,
+	Category = require('./category'),
 	url = 'mongodb://localhost:27017/movist';
 function Movie(movie) {
 	this.title = movie.title;
@@ -38,9 +38,10 @@ Movie.prototype.save = function(callback) {
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
 		movies.insert(_movie,function(err,doc){
-			db.close();
 			if(err) return callback(err);
-			callback(err,doc.ops[0]);
+			Category.save(doc.ops[0],function(){
+				callback(err,doc.ops[0]);
+			})
 		})
 	});
 }
