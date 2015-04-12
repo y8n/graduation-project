@@ -93,6 +93,22 @@ Movie.removeById = function(id,callback){
 	});
 }
 
+// 搜索包含指定名字的电影
+Movie.search = function search(name,callback){
+	MongoClient.connect(url,function(err,db){
+		var movies = db.collection('movies');
+		var reg = new RegExp(name,'i');
+		movies.find({title:reg}).toArray(function(err,movies){
+			db.close();
+			if(movies){
+				callback(err,movies);
+			}else{
+				callback(err,null);
+			}
+		});
+	})
+}
+
 
 
 

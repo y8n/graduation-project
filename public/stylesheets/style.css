@@ -5,3 +5,11 @@
 	bottom: 20px;
 	right: 0;
 }
+.panel-heading{
+	position: relative;
+}
+.result-pagination{
+	position: absolute;
+	right: 20px;
+	top: 0;
+}
