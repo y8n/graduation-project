@@ -88,7 +88,7 @@
 					}else{
 						$('#inputLanguage').val('普通话');
 					}
-					$('#inputPoster').val(data.images.medium);
+					$('#inputPoster').val(data.images.large);
 					$('#inputYear').val(data.year);
 					$('#inputSummary').val(data.summary);
 				}

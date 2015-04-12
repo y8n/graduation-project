@@ -64,6 +64,11 @@ router.get('/movie/update/:id',function(req,res){
 });
 // 提交表单
 router.post('/post/new_movie',function(req,res){
+	if(typeof req.body.category === 'string'){
+		var temp = req.body.category;
+		req.body.category = new Array(req.body.category);
+
+	}
 	var movie = new Movie(req.body);
 	movie.save(function(err,doc){
 		console.log(doc);
