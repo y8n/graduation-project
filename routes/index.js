@@ -1,11 +1,15 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router(),
+	Category = require('../models/category');
 
 
 // index page
 router.get('/', function(req, res) {
-    res.render('index',{
-    	title:'Welcome to Movist!'
-    });
+	Category.findAll(function(err,categories){
+	    res.render('index',{
+	    	title:'Welcome to Movist!',
+	    	categories:categories
+	    });
+	})
 });
 module.exports = router;

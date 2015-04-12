@@ -10,7 +10,7 @@ router.get('/m/:id',function(req,res){
 		if(err) return console.log(err);
 		if(movie){
 			res.render('detail',{
-				title:"电影详情页-"+movie.title,
+				title:movie.title,
 				movie:movie
 			})
 		}else{
@@ -29,7 +29,7 @@ router.get('/movie/new',function(req,res){
 		movie:{
 			_id:"",
 			title:"",
-			doctor:"",
+			director:"",
 			actors:[],
 			country:"",
 			language:"",
@@ -114,35 +114,35 @@ module.exports = router;
 var hot_movies = [
 			{
 				title:'战狼',
-				doctor:'吴京',
+				director:'吴京',
 				actors:['吴京','余男'],
 				grade:8.4,
 				category:'动作'
 			},
 			{
 				title:'霍比特人',
-				doctor:'彼得杰克逊',
+				director:'彼得杰克逊',
 				actors:['男一号','女一号'],
 				grade:9.0,
 				category:'魔幻，动作'
 			},
 			{
 				title:'后会无期',
-				doctor:'韩寒',
+				director:'韩寒',
 				actors:['忘了','不知道'],
 				grade:8.5,
 				category:'剧情，喜剧'
 			},
 			{
 				title:'无人区',
-				doctor:'宁浩',
+				director:'宁浩',
 				actors:['光头男','黄渤'],
 				grade:9.1,
 				category:'西部，犯罪'
 			},
 			{
 				title:'失恋三十三天',
-				doctor:'不知道',
+				director:'不知道',
 				actors:['白百合','文章'],
 				grade:7.422,
 				category:'剧情，爱情'

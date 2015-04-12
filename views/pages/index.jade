@@ -6,20 +6,54 @@ block content
       each cat in categories
         div(id="#{cat.name}")
         if cat.movies && cat.movies.length >0
-          .panel.panel-default
+          .panel.panel-default(id="#{cat.name}")
             .panel-heading
               h3 
                 a(href="/results?cat=#{cat._id}&p=1") #{cat.name}
             .panel-body
-              each item in cat.movies
-                .col-sm-2(style="margin-top:10px")
-                  .thumbnail(style="height:360px;width:160px")
-                    a(href="/movie/#{item._id}")
-                      if item.poster.indexOf('http:') >-1
-                        img(src="#{item.poster}",alt="#{item.title}",style="height:230px;width:150px")
-                      else
-                        img(src="/upload/#{item.poster}",alt="#{item.title}",style="height:230px;width:150px")
-                    .caption
-                      h4= item.title
-                      .see-movie
-                        a.btn.btn-primary(href="/movie/#{item._id}",role="button") 观看预告片 
+              div(style="margin-left:20px;")
+                each item in cat.movies
+                  .col-md-3(style="margin-top:10px;width:220px;")
+                    .thumbnail(style="height:360px;width:200px")
+                      a(href="/m/#{item._id}")
+                        if item.poster.indexOf('http:') >-1
+                          img(src="#{item.poster}",alt="#{item.title}",style="height:255px;width:180px")
+                        else
+                          img(src="/upload/#{item.poster}",alt="#{item.title}",style="height:255px;width:180px")
+                      .caption
+                        h5.text-center= item.title
+                        a.btn.btn-primary(href="/m/#{item._id}",role="button",style="display:block;") 观看预告片 
+    .categories
+      ul.list-froup
+        a(href="#top")
+          li.list-group-item TOP
+        a(href="#动作")  
+          li.list-group-item 动作片
+        a(href="#爱情")  
+          li.list-group-item 爱情片
+        a(href="#喜剧")  
+          li.list-group-item 喜剧片
+        a(href="#惊悚")  
+          li.list-group-item 惊悚片
+        a(href="#犯罪")  
+          li.list-group-item 犯罪片
+        a(href="#科幻")  
+          li.list-group-item 科幻片
+        a(href="#奇幻")  
+          li.list-group-item 奇幻片
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

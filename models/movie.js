@@ -5,7 +5,7 @@ var mongodb = require('mongodb'),
 	url = 'mongodb://localhost:27017/movist';
 function Movie(movie) {
 	this.title = movie.title;
-	this.doctor = movie.doctor;
+	this.director = movie.director;
 	this.actors = movie.actors;
 	this.country = movie.country;
 	this.language = movie.language;
@@ -25,7 +25,7 @@ module.exports = Movie;
 Movie.prototype.save = function(callback) {
 	var _movie = {
 		title: this.title,
-		doctor: this.doctor,
+		director: this.director,
 		actors: this.actors,
 		country: this.country,
 		language: this.language,

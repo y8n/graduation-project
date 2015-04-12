@@ -88,7 +88,7 @@ Category.findAll = function findAll(callback){
 					var _movies = [];
 					var movies = db.collection('movies');
 					;(function iterator2(j){
-						if(j == 10){ // 首页只展示对应类型的10部电影
+						if(j == 10 || j == category.movies.length){ // 首页只展示对应类型的10部电影
 							_category.movies = _movies;
 							_categories.push(_category);
 							iterator(++i);

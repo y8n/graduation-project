@@ -1,0 +1,7 @@
+/*定位锚点及链接*/
+.categories{
+	text-align: center;
+	position: fixed;
+	bottom: 20px;
+	right: 0;
+}

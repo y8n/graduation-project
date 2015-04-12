@@ -15,15 +15,15 @@ html
             label.col-sm-2.control-label(for="douban") 豆瓣同步
             .col-sm-7
               input#douban.form-control(type="text",name="douban",placeholder="请输入豆瓣电影ID")
-            button#getDouban.btn.btn-primary(type="button") 同步数据
+            button#getDouban.btn.btn-primary(type="button",data-loading-text="正在加载...",autocomplete="off") 同步数据
           .form-group
             label.col-sm-2.control-label(for="inputTitle") 电影名字
             .col-sm-7
               input#inputTitle.form-control(type="text",name="title",value="#{movie.title}")
           .form-group
-            label.col-sm-2.control-label(for="inputDoctor") 电影导演
+            label.col-sm-2.control-label(for="inputDirector") 电影导演
             .col-sm-7
-              input#inputDoctor.form-control(type="text",name="doctor",value="#{movie.doctor}")
+              input#inputDirector.form-control(type="text",name="director",value="#{movie.director}")
           .form-group
             label.col-sm-2.control-label(for="inputActors") 主演
             .col-sm-7
@@ -37,14 +37,14 @@ html
             .col-sm-7
               //- input#inputLanguage.form-control(type="text",name="language",value="#{movie.language}")
               select#inputLanguage.form-control(name="language")
-                option 国语
+                option 普通话
                 option 粤语
                 option 英语
                 option 法语
                 option 俄语
                 option 日语
                 option 德语
-                option 阿拉伯语
+                option 其他
           .form-group
             label.col-sm-2.control-label(for="selectCategory") 类型
             .col-sm-7
@@ -74,16 +74,26 @@ html
                     option(value="动画",selected="selected")  动画
                 - else
                     option(value="动画")  动画 
+                
+                - if(movie.category.indexOf('惊悚')!==-1)
+                    option(value="惊悚",selected="selected")  惊悚
+                - else
+                    option(value="惊悚")  惊悚 
+
+                - if(movie.category.indexOf('犯罪')!==-1)
+                    option(value="犯罪",selected="selected")  犯罪
+                - else
+                    option(value="犯罪")  犯罪 
 
                 - if(movie.category.indexOf('战争')!==-1)
                     option(value="战争",selected="selected")  战争
                 - else
                     option(value="战争")  战争  
 
-                - if(movie.category.indexOf('魔幻')!==-1)
-                    option(value="魔幻",selected="selected")  魔幻
+                - if(movie.category.indexOf('奇幻')!==-1)
+                    option(value="奇幻",selected="selected")  奇幻
                 - else
-                    option(value="魔幻")  魔幻     
+                    option(value="奇幻")  奇幻     
           .form-group
             label.col-sm-2.control-label(for="inputPoster") 海报地址
             .col-sm-7
@@ -116,14 +126,14 @@ html
             .panel-heading(role="tab",id="heading0")
               h6.panel-title
                 a(data-toggle="collapse",data-parent="#accordion",href="#panel0",aria-expanded="true",aria-controls="panel0")
-                  i.icon-num.clearfix.pull-left 1
+                  i.badge.clearfix.pull-left 1
                   p.pull-left &nbsp;#{hot_movies[0].title}
                   p.text-right #{hot_movies[0].grade}分
             .panel-collapse.collapse.in(id="panel0",role="tabpanel",aria-labelledby="heading0") 
               .panel-body 
                 img.sub-img.img-thumbnail.pull-left(alt="战狼",src="http://asd.jpg")
                 .hot-movie-content
-                  p 导演：#{hot_movies[0].doctor}
+                  p 导演：#{hot_movies[0].director}
                   p 主演：#{hot_movies[0].actors}
                   p 电影类型：#{hot_movies[0].category}
                   p 豆瓣评分：#{hot_movies[0].grade}分
@@ -132,14 +142,14 @@ html
               .panel-heading(role="tab",id="heading#{i}")
                 h6.panel-title
                   a(data-toggle="collapse",data-parent="#accordion",href="#panel#{i}",aria-expanded="false",aria-controls="panel#{i}")
-                    i.icon-num.clearfix.pull-left #{i+1}
+                    i.badge.clearfix.pull-left #{i+1}
                     p.pull-left &nbsp;#{hot_movies[i].title}
                     p.text-right #{hot_movies[i].grade}分
               .panel-collapse.collapse(id="panel#{i}",role="tabpanel",aria-labelledby="heading#{i}") 
                 .panel-body 
                   img.sub-img.img-thumbnail.pull-left(alt="战狼",src="http://asd.jpg")
                   .hot-movie-content
-                    p 导演：#{hot_movies[i].doctor}
+                    p 导演：#{hot_movies[i].director}
                     p 主演：#{hot_movies[i].actors}
                     p 电影类型：#{hot_movies[i].category}
                     p 豆瓣评分：#{hot_movies[i].grade}分
