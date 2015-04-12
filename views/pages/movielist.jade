@@ -1,0 +1,45 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      div(style="height:345px")
+        table.table.table-hover.table-bordered
+          thead
+            tr
+              th.col-sm-1 电影名字
+              th.col-sm-1 导演
+              th.col-sm-3 主演
+              th.col-sm-1 国家
+              th.col-sm-1 上映时间
+              th.col-sm-1 电影类型
+              th.col-sm-1 查看
+              th.col-sm-1 更新
+              th.col-sm-1 删除
+          tbody
+            each item in movies
+              tr(class="item-id-#{item._id}")
+                td #{item.title}
+                td #{item.doctor}
+                td #{item.actors}
+                td #{item.country}
+                td #{item.year}
+                td #{item.category}
+                td: a(target="_blank",href="/m/#{item._id}") 查看
+                td: a(target="_blank",href="/movie/update/#{item._id}") 修改
+                td
+                  button.btn.btn-lg.btn-danger.del(type="button",data-id="#{item._id}") 删除
+      ul.pagination.panel-pagination.pull-right
+        - for (var i =1;i<=totalPage;i++){
+        -   if(currentPage == i){
+              li.active
+                span= currentPage
+        -   }else if(Math.abs(currentPage-i) == 3){
+              li
+                span ...
+        -   }else if(Math.abs(currentPage-i) < 3){
+              li
+                a(href="/admin/movie/list?p=#{i}") #{i}  
+        -   }
+        - }          
+  script(src="/javascripts/admin.js",type="text/javascript")

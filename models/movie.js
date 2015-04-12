@@ -38,6 +38,7 @@ Movie.prototype.save = function(callback) {
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
 		movies.insert(_movie,function(err,doc){
+			db.close();
 			if(err) return callback(err);
 			callback(err,doc.ops[0]);
 		})
@@ -52,12 +53,44 @@ Movie.findById = function (id,callback){
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
 		movies.find({_id:ObjectID(id)}).toArray(function(err,doc){
+			db.close();
 			if(err) return callback(err);
 			callback(err,doc[0]);
 		})
 	});
 }
 
+/*
+ * 获取所有电影
+ * callback(err,moveis)
+ * movies 所有的电影信息
+ */
+Movie.findAll = function(callback){
+	MongoClient.connect(url,function(err,db){
+		var movies = db.collection('movies');
+		movies.find({}).toArray(function(err,doc){
+			db.close();
+			if(err) return callback(err);
+			callback(err,doc);
+		})
+	});
+}
+
+/* 
+ * 删除指定id的电影
+ * callback(err,movie)
+ * 即将被删除的电影
+ */
+Movie.removeById = function(id,callback){
+	MongoClient.connect(url,function(err,db){
+		var movies = db.collection('movies');
+		movies.remove({_id:ObjectID(id)},function(err,doc){
+			db.close();
+			if(err) return callback(err);
+			callback(err,doc.result.n);
+		})
+	});
+}
 
 
 

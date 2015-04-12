@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Movie = require('../models/movie');
+
+
 // movie detail
 router.get('/m/:id',function(req,res){
 	var id = req.params.id;
@@ -37,7 +39,79 @@ router.get('/movie/new',function(req,res){
 			year:"",
 			summary:"",
 		},
-		hot_movies:[
+		hot_movies:hot_movies
+	})
+});
+
+// update movie
+router.get('/movie/update/:id',function(req,res){
+	var id = req.params.id;
+	Movie.findById(id,function(err,movie){
+		if(err) return console.log(err);
+		if(movie){
+			res.render('edit_movie',{
+				title:"更新电影信息-"+movie.title,
+				movie:movie,
+				hot_movies:hot_movies
+			})
+		}else{
+			res.render('detail',{
+				title:"电影详情页",
+			})
+		}
+	})
+	
+});
+// 提交表单
+router.post('/post/new_movie',function(req,res){
+	var movie = new Movie(req.body);
+	movie.save(function(err,doc){
+		console.log(doc);
+		res.redirect('/m/'+doc._id);
+	})
+});
+// 电影列表
+router.get('/admin/movielist',function(req,res){
+	var page = req.query.p  || 1;
+    var count = 6;
+    var index = (page-1) * count;
+	Movie.findAll(function(err,movies){
+        if(err){
+            console.error(err);
+            return;
+        }
+        var len = movies.length;
+        var results = movies.splice(index,count);
+        res.render('movielist',{
+            title:'Movie List',
+            movies:results,
+            currentPage:page,
+            totalPage:Math.ceil(len/count)
+        });
+    })
+});
+// 删除电影信息
+router.post('/admin/movielist',function(req,res){
+    var id = req.query.id;
+    if(id){
+        Movie.removeById(id,function(err,movie){
+            if(err){
+                console.error(err);
+                return;
+            }
+            if(movie === 1){
+                console.log("Remove success");
+                res.send({success:true,msg:"删除成功"})
+            }else if(movie === 0){
+                console.log("No matched data");
+                res.send({success:false,msg:"删除失败:电影不存在"})
+            }
+        });
+    }
+})
+module.exports = router;
+
+var hot_movies = [
 			{
 				title:'战狼',
 				doctor:'吴京',
@@ -74,27 +148,6 @@ router.get('/movie/new',function(req,res){
 				category:'剧情，爱情'
 			}
 		]
-	})
-});
-
-// update movie
-router.get('/movie/update',function(req,res){
-	res.render('edit_movie',{
-		title:"update movie"
-	})
-});
-// 提交表单
-router.post('/post/new_movie',function(req,res){
-	console.log(req.body);
-	var movie = new Movie(req.body);
-	movie.save(function(err,doc){
-		console.log(doc);
-		res.redirect('/m/'+doc._id);
-	})
-});
-module.exports = router;
-
-
 
 
 

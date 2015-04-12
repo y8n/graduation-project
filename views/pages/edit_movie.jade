@@ -50,15 +50,40 @@ html
             .col-sm-7
               input#oldCategory.form-control(type="hidden",name="oldCategory",value="#{movie.category}")
               select#selectCategory.form-control(name="category",multiple="multiple")
-                option  动作片
-                option  剧情片
-                option  爱情片
-                option  喜剧片
-                option  科幻片
-                option  动画片
-                option  战争片
-                option  犯罪片
-                option  魔幻片
+                - if(movie.category.indexOf('动作')!==-1)
+                    option(value="动作",selected="selected")  动作
+                - else
+                    option(value="动作")  动作
+                - if(movie.category.indexOf('剧情')!==-1)
+                    option(value="剧情",selected="selected")  剧情
+                - else
+                    option(value="剧情")  剧情
+                - if(movie.category.indexOf('爱情')!==-1)
+                    option(value="爱情",selected="selected")  爱情
+                - else
+                    option(value="爱情")  爱情
+                - if(movie.category.indexOf('喜剧')!==-1)
+                    option(value="喜剧",selected="selected")  喜剧
+                - else
+                    option(value="喜剧")  喜剧 
+                - if(movie.category.indexOf('科幻')!==-1)
+                    option(value="科幻",selected="selected")  科幻
+                - else
+                    option(value="科幻")  科幻 
+                - if(movie.category.indexOf('动画')!==-1)
+                    option(value="动画",selected="selected")  动画
+                - else
+                    option(value="动画")  动画 
+
+                - if(movie.category.indexOf('战争')!==-1)
+                    option(value="战争",selected="selected")  战争
+                - else
+                    option(value="战争")  战争  
+
+                - if(movie.category.indexOf('魔幻')!==-1)
+                    option(value="魔幻",selected="selected")  魔幻
+                - else
+                    option(value="魔幻")  魔幻     
           .form-group
             label.col-sm-2.control-label(for="inputPoster") 海报地址
             .col-sm-7

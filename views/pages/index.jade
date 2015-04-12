@@ -3,7 +3,23 @@ extends ../layout
 block content
   .container
     .row
-      h1 #{title}
-      
-
-
+      each cat in categories
+        div(id="#{cat.name}")
+        if cat.movies && cat.movies.length >0
+          .panel.panel-default
+            .panel-heading
+              h3 
+                a(href="/results?cat=#{cat._id}&p=1") #{cat.name}
+            .panel-body
+              each item in cat.movies
+                .col-sm-2(style="margin-top:10px")
+                  .thumbnail(style="height:360px;width:160px")
+                    a(href="/movie/#{item._id}")
+                      if item.poster.indexOf('http:') >-1
+                        img(src="#{item.poster}",alt="#{item.title}",style="height:230px;width:150px")
+                      else
+                        img(src="/upload/#{item.poster}",alt="#{item.title}",style="height:230px;width:150px")
+                    .caption
+                      h4= item.title
+                      .see-movie
+                        a.btn.btn-primary(href="/movie/#{item._id}",role="button") 观看预告片 
