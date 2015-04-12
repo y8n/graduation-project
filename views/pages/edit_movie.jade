@@ -25,6 +25,10 @@ html
             .col-sm-7
               input#inputDoctor.form-control(type="text",name="doctor",value="#{movie.doctor}")
           .form-group
+            label.col-sm-2.control-label(for="inputActors") 主演
+            .col-sm-7
+              input#inputActors.form-control(type="text",name="actors",value="#{movie.actors}")
+          .form-group
             label.col-sm-2.control-label(for="inputCountry") 国家
             .col-sm-7
               input#inputCountry.form-control(type="text",name="country",value="#{movie.country}")
@@ -45,7 +49,7 @@ html
             label.col-sm-2.control-label(for="selectCategory") 类型
             .col-sm-7
               input#oldCategory.form-control(type="hidden",name="oldCategory",value="#{movie.category}")
-              select#selectCategory.form-control(name="category")
+              select#selectCategory.form-control(name="category",multiple="multiple")
                 option  动作片
                 option  剧情片
                 option  爱情片

@@ -21,6 +21,10 @@
 			alert('片源地址不能为空!');
 			return false;
 		}
+		if (!/^http:\/\//.test(form.inputFlash.value)) {
+			alert('片源地址输入有误!');
+			return false;
+		}
 		if (!/^\d{4}$/.test(form.inputYear.value)) {
 			alert('上映年份有误!');
 			return false;

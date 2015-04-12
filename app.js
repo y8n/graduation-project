@@ -47,11 +47,12 @@ var url = 'mongodb://localhost:27017/movist';
 MongoClient.connect(url, function(err, db){
     if(err) return console.error(err);
     console.log('connect mongodb success');
+    app.database = db;
     app.listen(port);
     console.log('Server listen on '+port);
-    require("child_process").exec('open "http://localhost:3000"');
+    // require("child_process").exec('open "http://localhost:3000"');
 });
-
+exports.app = app;
 app.use(routes);
 
 

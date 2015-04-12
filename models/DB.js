@@ -1,0 +1,9 @@
+var config = require('../Db_config');
+var mongodb = require('mongodb');
+var Db = mongodb.Db,
+    Connection = mongodb.Connection,
+    Server = mongodb.Server;
+var database = config.database,
+	host = config.host,
+	port = config.port;
+module.exports = new Db(database,new Server(host,port,{auto_reconnect:true,poolSize:20}),{w:1});
