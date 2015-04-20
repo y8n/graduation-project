@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Movie = require('../models/movie');
+var Category = require('../models/category');
 
 
 // movie detail
@@ -70,10 +71,30 @@ router.post('/post/new_movie',function(req,res){
 
 	}
 	var movie = new Movie(req.body);
-	movie.save(function(err,doc){
-		console.log(doc);
-		res.redirect('/m/'+doc._id);
-	})
+	if(req.body._id ===''){
+		movie.save(function(err,doc){
+			res.redirect('/m/'+doc._id);
+		})
+	}else {
+		function contains(arr,ele){
+			for(var n=0;n<arr.length;n++){
+				if(arr[n] === ele){
+					return true;
+				}
+			}
+			return false;
+		}
+		var oldCategory = req.body.oldCategory.split(',');
+		for(var i=0;i<oldCategory.length;i++){
+			if(!contains(movie.category,oldCategory[i])){
+				Category.removeMovie(oldCategory[i],req.body._id,function(err,doc){
+				})
+			}
+		}
+		movie.update(req.body._id,function(err,movie){
+			res.redirect('/m/'+movie._id);
+		})	
+	}
 });
 // 电影列表
 router.get('/admin/movielist',function(req,res){
@@ -117,42 +138,42 @@ router.post('/admin/movielist',function(req,res){
 module.exports = router;
 
 var hot_movies = [
-			{
-				title:'战狼',
-				director:'吴京',
-				actors:['吴京','余男'],
-				grade:8.4,
-				category:'动作'
-			},
-			{
-				title:'霍比特人',
-				director:'彼得杰克逊',
-				actors:['男一号','女一号'],
-				grade:9.0,
-				category:'魔幻，动作'
-			},
-			{
-				title:'后会无期',
-				director:'韩寒',
-				actors:['忘了','不知道'],
-				grade:8.5,
-				category:'剧情，喜剧'
-			},
-			{
-				title:'无人区',
-				director:'宁浩',
-				actors:['光头男','黄渤'],
-				grade:9.1,
-				category:'西部，犯罪'
-			},
-			{
-				title:'失恋三十三天',
-				director:'不知道',
-				actors:['白百合','文章'],
-				grade:7.422,
-				category:'剧情，爱情'
-			}
-		]
+	{
+		title:'战狼',
+		director:'吴京',
+		actors:['吴京','余男'],
+		grade:8.4,
+		category:'动作'
+	},
+	{
+		title:'霍比特人',
+		director:'彼得杰克逊',
+		actors:['男一号','女一号'],
+		grade:9.0,
+		category:'魔幻，动作'
+	},
+	{
+		title:'后会无期',
+		director:'韩寒',
+		actors:['忘了','不知道'],
+		grade:8.5,
+		category:'剧情，喜剧'
+	},
+	{
+		title:'无人区',
+		director:'宁浩',
+		actors:['光头男','黄渤'],
+		grade:9.1,
+		category:'西部，犯罪'
+	},
+	{
+		title:'失恋三十三天',
+		director:'不知道',
+		actors:['白百合','文章'],
+		grade:7.422,
+		category:'剧情，爱情'
+	}
+]
 
 
 

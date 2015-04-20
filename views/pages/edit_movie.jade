@@ -37,14 +37,38 @@ html
             .col-sm-7
               //- input#inputLanguage.form-control(type="text",name="language",value="#{movie.language}")
               select#inputLanguage.form-control(name="language")
-                option 普通话
-                option 粤语
-                option 英语
-                option 法语
-                option 俄语
-                option 日语
-                option 德语
-                option 其他
+                - if(movie.language.indexOf('普通话')!==-1)
+                    option(value="普通话",selected="selected")  普通话
+                - else
+                    option(value="普通话")  普通话
+                - if(movie.language.indexOf('粤语')!==-1)
+                    option(value="粤语",selected="selected")  粤语
+                - else
+                    option(value="粤语")  粤语
+                - if(movie.language.indexOf('英语')!==-1)
+                    option(value="英语",selected="selected")  英语
+                - else
+                    option(value="英语")  英语
+                - if(movie.language.indexOf('法语')!==-1)
+                    option(value="法语",selected="selected")  法语
+                - else
+                    option(value="法语")  法语
+                - if(movie.language.indexOf('俄语')!==-1)
+                    option(value="俄语",selected="selected")  俄语
+                - else
+                    option(value="俄语")  俄语
+                - if(movie.language.indexOf('日语')!==-1)
+                    option(value="日语",selected="selected")  日语
+                - else
+                    option(value="日语")  日语
+                - if(movie.language.indexOf('德语')!==-1)
+                    option(value="德语",selected="selected")  德语
+                - else
+                    option(value="德语")  德语
+                - if(movie.language.indexOf('其他')!==-1)
+                    option(value="其他",selected="selected")  其他
+                - else
+                    option(value="其他")  其他
           .form-group
             label.col-sm-2.control-label(for="selectCategory") 类型
             .col-sm-7

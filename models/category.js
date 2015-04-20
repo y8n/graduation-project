@@ -71,7 +71,7 @@ Category.findById = function findById(id,callback){
 Category.findAll = function findAll(callback){
 	MongoClient.connect(url,function(err,db){
 		if(err) return callback(err);
-		db.collection('categories').find({}).toArray(function(err,categories){
+		db.collection('categories').find({}).sort({index:1}).toArray(function(err,categories){
 			if(categories){
 				var _categories = [];
 				;(function iterator(i){
@@ -105,31 +105,26 @@ Category.findAll = function findAll(callback){
 	});
 }
 // 从oldCategory中移除指定ID的电影
-Category.removeMovie = function removeMovie(oldCategories,movieId,callback){
+Category.removeMovie = function removeMovie(oldCategory,movieId,callback){
 	MongoClient.connect(url,function(err,db){
 		if(err) return callback(err);
 		var categories = db.collection('categories');
-		(function it(i){
-			if(i === oldCategories.length){
-				callback();
-				return;
-			}
-			categories.findOne({name:oldCategories[i]},function(err,category){
-				if(category){
-					// 如果有了这一部电影,把原来电影数据删除再更新
-					for(var j=0,len=category.movies.length;j<len;j++){
-						if((category.movies[j]+'') == (movieId+'')){
-							category.movies.splice(j,1);
-							break;
-						}
+		categories.findOne({name:oldCategory},function(err,category){
+			if(category){
+				// 如果有了这一部电影,把原来电影数据删除再更新
+				for(var j=0,len=category.movies.length;j<len;j++){
+					if((category.movies[j]+'') == (movieId+'')){
+						category.movies.splice(j,1);
+						categories.update({name:oldCategory},{$set:{movies:category.movies}},function(err,doc){
+							if(doc.result.ok === 1 && doc.result.n ===1)
+								callback(err,doc);						
+						})
+						break;
 					}
-					categories.update({name:oldCategories[i]},{$set:{movies:category.movies}},function(err,doc){
-						if(doc.result.ok === 1 && doc.result.n ===1)
-							it(++i);						
-					})
 				}
-			});
-		})(0);
+				
+			}
+		});
 	});	
 }
 /*

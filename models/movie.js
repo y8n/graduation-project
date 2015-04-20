@@ -108,7 +108,34 @@ Movie.search = function search(name,callback){
 		});
 	})
 }
-
+// 根据电影ID更新数据
+Movie.prototype.update = function update(id,callback){
+	var _movie = {
+		title : this.title,
+	    director : this.director,
+	    actors:this.actors,
+	    country : this.country,
+	    year : this.year,
+	    poster : this.poster,
+	    flash : this.flash,
+	    summary : this.summary,
+	    language : this.language,
+	    category : this.category
+	}
+	MongoClient.connect(url,function(err,db){
+		db.collection('movies').update({_id:ObjectID(id)},{$set:_movie},function(err,doc){
+			if(doc.result.ok ===1 && doc.result.n ===1){
+				_movie._id = id;
+				console.log(_movie)
+				Category.save(_movie,function(err,movie){
+					callback(err,_movie);
+				})
+			}else{
+				callback(err,null);
+			}
+		});
+	})
+}
 
 
 
