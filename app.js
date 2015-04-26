@@ -52,6 +52,23 @@ MongoClient.connect(url, function(err, db){
     console.log('Server listen on '+port);
     // require("child_process").exec('open "http://localhost:3000"');
 });
+//用户写入模板,并记录当前url
+app.use(function(req,res,next){
+    var user = req.session.user;
+    // 记录用户最近5次的浏览记录
+    if(req.session.preUrl){
+        req.session.preUrl.unshift(req.url);
+        if(req.session.preUrl.length > 5){
+            req.session.preUrl.pop();
+        }
+    }else{ 
+        req.session.preUrl = [req.url];
+    }
+    if(user){
+        res.locals.user = user;
+    }
+    next();
+})
 exports.app = app;
 app.use(routes);
 

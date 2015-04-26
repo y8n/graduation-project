@@ -13,6 +13,7 @@ block content
               th.col-sm-1 国家
               th.col-sm-1 上映时间
               th.col-sm-1 电影类型
+              th.col-sm-1 上传用户
               th.col-sm-1 查看
               th.col-sm-1 更新
               th.col-sm-1 删除
@@ -25,6 +26,8 @@ block content
                 td #{item.country}
                 td #{item.year}
                 td #{item.category}
+                td 
+                  a(target="_blank",href="/u/#{item.user}") #{item.user}
                 td: a(target="_blank",href="/m/#{item._id}") 查看
                 td: a(target="_blank",href="/movie/update/#{item._id}") 修改
                 td

@@ -3,7 +3,41 @@ extends ../layout
 block content
   .container
     .row
-      h1 #{title}
-      
-
-
+      div(style="height:345px")
+        table.table.table-hover.table-bordered
+          thead
+            tr
+              th.col-sm-2 名字
+              th.col-sm-2 用户权限
+              th.col-sm-2 用户积分
+              th.col-sm-2 查看
+              th.col-sm-2 更新
+              th.col-sm-2 删除
+          tbody
+            each user in users
+              tr(class="user-id-#{user._id}")
+                td #{user.username}
+                if user.role == 3
+                  td 普通用户
+                else if user.role ==  2
+                  td.text-danger VIP用户
+                else 
+                  td 管理员
+                td #{user.score}
+                td: a(target="_blank",href="javascript:void(0)") 查看
+                td: a(target="_blank",href="../user/update/#{user._id}") 修改
+                td
+                  button.btn.btn-danger.del(type="button",data-id="#{user._id}") 删除
+      ul.pagination.panel-pagination.pull-right
+        - for (var i =1;i<=totalPage;i++){
+        -   if(currentPage == i){
+              li.active
+                span= currentPage
+        -   }else if(Math.abs(currentPage-i) == 3){
+              li
+                span ...
+        -   }else if(Math.abs(currentPage-i) < 3){
+              li
+                a(href="/user/list?p=#{i}") #{i}  
+        -   }
+        - }

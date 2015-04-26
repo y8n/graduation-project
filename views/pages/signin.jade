@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      .col-md-4.col-md-offset-4
+        h3.col-md-offset-5 登录
+        form#signinForm(method="post",action="/user/signin")
+          .modal-body
+            .form-group
+              label(for="signinName") 用户名 
+              input#signinName.form-control(name="username",type="text")
+            .form-group
+              label(for="signinPassword") 密码
+              input#signinPassword.form-control(name="password",type="password")
+            - if(msg)
+              .alert.alert-block.alert-danger #{msg}
+          .modal-footer
+            .alert.alert-dismissable(style="display:none")
+              .content
+            button.btn(type="button",data-dismiss="modal") 关闭
+            button.btn.btn-primary(type="submit") 登录
+  //- script(src="/javascripts/admin.js",type="text/javascript")
+
+
+
+

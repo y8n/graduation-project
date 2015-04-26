@@ -9,9 +9,9 @@
             a(href="/") 首页
           li
             a(href="/movie/new") 添加新电影
-          if user && user.role > 10
+          if user && user.role === 1
             li
-              a(href="/admin/movie/list?p=1") 所有电影列表
+              a(href="/admin/movielist?p=1") 所有电影列表
             li
               a(href="/user/list?p=1") 用户列表
             li
@@ -23,13 +23,19 @@
             li
               a(href="/logout") 登出
         else
-          form.navbar-form.navbar-right(method="post",action="/user/signin")
-            .form-group
-              input.form-control(type="text",name="username",placeholder="Username")
-            .form-group
-              input.form-control(type="password",name="password",placeholder="Password")
-            button.btn.btn-primary(type="submit") 登录
-            button.btn.btn-primary(type="button",data-toggle="modal",data-target="#signupModal") 注册
+          //- form.navbar-form.navbar-right(method="post",action="/user/signin")
+          //-   .form-group
+          //-     input.form-control(type="text",name="username",placeholder="Username")
+          //-   .form-group
+          //-     input.form-control(type="password",name="password",placeholder="Password")
+          //-   button.btn.btn-primary(type="submit") 登录
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href="javascript:void(0)",data-toggle="modal",data-target="#signinModal") 登陆
+            li
+              a(href="javascript:void(0)",data-toggle="modal",data-target="#signupModal") 注册
+          //- button.btn.btn-primary.navbar-right(type="button",data-toggle="modal",data-target="#signinModal") 登陆
+          //- button.btn.btn-primary.navbar-right(type="button",data-toggle="modal",data-target="#signupModal") 注册
     h1= title
     form(method="get",action="/results",style="top:-50px;position:relative")
       .input-group.col-sm-4.pull-right
@@ -58,6 +64,25 @@
         .modal-footer
           button.btn(type="button",data-dismiss="modal") 关闭
           button#signupbtn.btn.btn-primary(type="button") 注册
+
+#signinModal.modal
+  .modal-dialog(style="width:300px")
+    .modal-content
+      form(method="post",action="/user/signin")
+        .modal-header  
+          a.close(href="#",data-dismiss='modal') x
+          h4 登陆
+        .modal-body
+          .form-group
+            label(for="signinName") 用户名 
+            input#signinName.form-control(name="username",type="text")
+          .form-group
+            label(for="signinPassword") 密码
+            input#signinPassword.form-control(name="password",type="password")
+          .alert.alert-block.alert-danger(style='display:none;')
+        .modal-footer
+          button.btn(type="button",data-dismiss="modal") 关闭
+          button#signinbtn.btn.btn-primary(type="button") 登陆
 
 
 
