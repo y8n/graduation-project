@@ -3,7 +3,72 @@ extends ../layout
 block content
   .container
     .row
-      
-      
+      ul.nav.nav-tabs(role="tablist")
+        li.active
+          a(href="#tab1",data-toggle="tab") 基本设置
+        li
+          a(href="#tab2",data-toggle="tab") 安全设置
+        li
+          a(href="#tab3",data-toggle="tab") 权限申请
+        li
+          a(href="#tab4",data-toggle="tab") 订阅管理
+      br
+      .tab-content
+        #tab1.tab-pane.active 
+          img.preview.img-rounded.pull-left(src="#{currentuser.avatar}",alt="头像预览",title="用户头像")
+          .col-md-9  
+            form.form-horizontal#user_setting(action="/user/setting",method="post",enctype='multipart/form-data') 
+              input(type="hidden",value="#{currentuser.username}",name="username")
+              .form-group
+                label.col-sm-2.control-label(for="username") 用户名:
+                .col-sm-4
+                  input#username.form-control(type="text",name="username",value="#{currentuser.username}",disabled="disabled")
+              .form-group
+                label.col-sm-2.control-label(for="avatar") 头像:
+                .col-sm-4
+                  input.avatar.form-control(type="file",name="avatar")
+                  //- button#uploadAvatar.btn.btn-primary.btn-sm(type="button") 上传
+              .form-group
+                label.col-sm-2.control-label(for="sex") 性别:
+                .col-sm-4
+                  label.radio.pull-left
+                    - if(currentuser.sex === 'male')
+                      input(type="radio",name="sex",value="male",checked="checked")
+                    - else
+                      input(type="radio",name="sex",value="male")
+                    span 男
+                  label.pull-left &nbsp;
+                  label.radio.pull-left
+                    - if(currentuser.sex === 'female')
+                      input(type="radio",name="sex",value="female",checked="checked")
+                    - else
+                      input(type="radio",name="sex",value="female")
+                    span 女  
+              .form-group
+                label.col-sm-2.control-label(for="signature") 个性签名:
+                .col-sm-4
+                  textarea#signature.form-control(type="text",name="signature") #{currentuser.signature}
+              .form-group
+                .col-sm-1.col-md-offset-3
+                  button#reset-movie.btn.btn-warning(type="reset") 重置
+                .col-sm-2
+                  button#add-movie.btn.btn-success(type="submit") 保存
+        #tab2.tab-pane 我会JavaScript？
+        #tab3.tab-pane Python就不会了
+        #tab4.tab-pane Python就不会了
 
+        
 
+    #setting_message.modal
+      .modal-dialog(style="width:300px")
+        .modal-content
+            .modal-header  
+              a.close(href="#",data-dismiss='modal') x
+              h4 结果
+            .modal-body
+                p 更新成功
+            .modal-footer
+              button.btn(type="button",data-dismiss="modal") 确定
+
+    - if(setting)
+      script(type="text/javascript") $('#setting_message').modal('show'); 

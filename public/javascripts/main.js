@@ -41,31 +41,47 @@ $(function(){
 				}
 			});
 		}
-	})
-	$('#signinbtn').click(function(){
-		var target = $(this);
-		var $form = $('#signinModal form');
-		var	username = $('#signinName');
-		var password = $('#signinPassword');
-		var $alert = $('#signinModal .alert').hide();
-		if(username.val() === '' || password.val() === ''){
-			$alert.text('信息输入不完整!').show();
-		}else{
-			$.ajax({
-				url:'/user/signin',
-				type:'post',
-				dataType:'json',
-				data:$form.serialize(),
-				success:function(data){
-					if(data.success){
-						$('#signinModal').hide();
-						window.location = window.location.origin+data.pathname;
-					}else{
-						$alert.text('用户名或密码错误').show();
-					}
-				}
-			});
+	});
+	function checkImgType(filename) {  
+	    var pos = filename.lastIndexOf(".");  
+	    var str = filename.substring(pos, filename.length)  
+	    var str1 = str.toLowerCase();  
+	    if (!/\.(gif|jpg|jpeg|png|bmp)$/.test(str1)) {  
+	        return false;  
+	    }  
+	    return true;  
+	} 
+	// $('#uploadAvatar').click(function(){
+	// 	var avatar = $('.preview');
+	// 	var input = $('input.avatar');
+	// 	if(input.val() !== '' &&  !checkImgType(input.val())){
+	// 		alert("格式不正确,只能上传格式为gif|jpeg|jpg|png|bmp！");  
+ //            return false;  
+	// 	}
+	// 	var myform,form;
+	// 	if($('#upload-avatar').length === 0){
+	// 		myform = document.createElement("form");
+	// 		myform.id = 'upload-avatar';
+	// 		myform.action = '/avatar/upload';
+	// 		myform.method = 'post';
+	// 		myform.enctype = "multipart/form-data";  
+	// 	    myform.style.display = "none";
+	//     	document.body.appendChild(myform);
+	//     	form = $(myform);
+	// 	}else{
+	//     	form = $(myform);
+	// 		form.find('input').remove();
+	// 	}
+	//     var clone = input.clone(true);
+	//     clone.appendTo(form);
+	//     console.log(form)
+	// });
+	$('form#user_setting').onSubmit = function(){
+		var avatar = $('input.avatar');
+		if(input.val() !== '' &&  !checkImgType(input.val())){
+			alert("格式不正确,只能上传格式为gif|jpeg|jpg|png|bmp！");  
+            return false;  
 		}
+	}
 
-	})
 });

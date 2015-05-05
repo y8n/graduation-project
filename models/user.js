@@ -93,8 +93,20 @@ User.findAll = function findAll(callback){
 		})
 	});
 }
-
-
+// 用户基本信息设置
+User.setting = function(username,options,callback){
+	User.findByName(username,function(err,user){
+		if(err) return callback(err);
+		MongoClient.connect(url,function(err,db){
+			if(err) return callback(err);
+			var users = USER_COLLECTION || db.collection('users');
+			users.update({username:username},{$set:options},function(err,doc){
+				if(err) callback(err);
+				callback(err,doc);
+			})
+		});
+	})
+}
 
 
 
