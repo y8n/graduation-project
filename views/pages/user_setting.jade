@@ -8,10 +8,10 @@ block content
           a(href="#tab1",data-toggle="tab") 基本设置
         li
           a(href="#tab2",data-toggle="tab") 安全设置
-        li
-          a(href="#tab3",data-toggle="tab") 权限申请
-        li
-          a(href="#tab4",data-toggle="tab") 订阅管理
+        //- li
+        //-   a(href="#tab3",data-toggle="tab") 权限申请
+        //- li
+        //-   a(href="#tab4",data-toggle="tab") 订阅管理
       br
       .tab-content
         #tab1.tab-pane.active 
@@ -50,10 +50,31 @@ block content
                   textarea#signature.form-control(type="text",name="signature") #{currentuser.signature}
               .form-group
                 .col-sm-1.col-md-offset-3
-                  button#reset-movie.btn.btn-warning(type="reset") 重置
+                  button.btn.btn-warning(type="reset") 重置
                 .col-sm-2
-                  button#add-movie.btn.btn-success(type="submit") 保存
-        #tab2.tab-pane 我会JavaScript？
+                  button.btn.btn-success(type="submit") 保存
+        #tab2.tab-pane 
+          .col-md-9 
+            h4 修改密码
+            form.form-horizontal#changePwd(action="/user/setting",method="post")
+              input(type="hidden",value="#{currentuser.username}",name="username")
+              .form-group
+                label.col-sm-2.control-label(for="oldPassword") 旧密码:
+                .col-sm-4
+                  input#oldPassword.form-control(type="password",name="oldPassword")
+              .form-group
+                label.col-sm-2.control-label(for="newPassword") 新密码:
+                .col-sm-4
+                  input#newPassword.form-control(type="password",name="newPassword")
+              .form-group
+                label.col-sm-2.control-label(for="reNewPassword") 确认密码:
+                .col-sm-4
+                  input#reNewPassword.form-control(type="password",name="reNewPassword")
+              .form-group
+                .col-sm-1.col-md-offset-3
+                  button.btn.btn-warning(type="reset") 重置
+                .col-sm-2
+                  button.btn.btn-success(type="submit") 保存              
         #tab3.tab-pane Python就不会了
         #tab4.tab-pane Python就不会了
 
@@ -66,7 +87,7 @@ block content
               a.close(href="#",data-dismiss='modal') x
               h4 结果
             .modal-body
-                p 更新成功
+                p #{msg}
             .modal-footer
               button.btn(type="button",data-dismiss="modal") 确定
 

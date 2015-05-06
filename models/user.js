@@ -107,7 +107,26 @@ User.setting = function(username,options,callback){
 		});
 	})
 }
-
+// 修改用户密码
+User.changePassword = function(username,oldpwd,newpwd,callback){
+	User.checkPassword(username,oldpwd,function(err,match,user){
+		if(err) return callback(err);
+		if(match){
+			var md5 = crypto.createHash('md5'),
+			_password = md5.update(newpwd).digest('base64');
+			MongoClient.connect(url,function(err,db){
+				if(err) return callback(err);
+				var users = USER_COLLECTION || db.collection('users');
+				users.update({username:username},{$set:{password:_password}},function(err,doc){
+					if(err) callback(err);
+					callback(err,user);
+				})
+			});
+		}else{
+			callback(err,null);
+		}
+	});
+}
 
 
 

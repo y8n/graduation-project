@@ -20,41 +20,76 @@ router.get('/u/:username', function(req, res) {
 router.post('/user/setting', multipart(), function(req, res) {
 	var username = req.body.username;
 	delete req.body.username;
-	var avatar = req.files.avatar;
-	if(avatar.name !== ''){
-		var ext = avatar.type.substring(avatar.type.lastIndexOf('/') +1);
-		fs.mkdir('public/images/avatars', function() {
-			var url = '/images/avatars/' + username+'_'+ new Date().getTime() + '.'+ext
-			fs.rename(req.files.avatar.path, 'public'+url, function() {
-				req.body.avatar = url;
-				User.setting(username,req.body,function(err,doc){
-					if(doc.result.ok === 1){
-						User.findByName(username, function(err, user) {
-							if (err) return console.log(err);
-							res.render('user_setting', {
-								title: '用户设置',
-								currentuser: user,
-								setting:true
-							});
-						})
-					}
-				});
-			});
-		});
-	}else {
-		User.setting(username,req.body,function(err,doc){
-			if(doc.result.ok === 1){
-				User.findByName(username, function(err, user) {
-					if (err) return console.log(err);
+	User.findByName(username,function(err,user){
+		if(req.body.oldPassword){
+			var oldpwd = req.body.oldPassword;
+			var newpwd = req.body.newPassword;
+			User.changePassword(username,oldpwd,newpwd,function(err,exists){
+				if(err) {
+					console.log(err);
+				}
+				if(exists){ // 修改成功
 					res.render('user_setting', {
 						title: '用户设置',
 						currentuser: user,
+						msg:'修改密码成功',
 						setting:true
 					});
-				})
+				}else{ // 修改失败
+					res.render('user_setting', {
+						title: '用户设置',
+						currentuser: user,
+						msg:'修改密码失败',
+						setting:true
+					});
+				}
+			})
+
+		}else if(req.body.sex){
+			var avatar = req.files.avatar;
+			if(avatar.name !== ''){
+				var ext = avatar.type.substring(avatar.type.lastIndexOf('/') +1);
+				if(!fs.existsSync('public/images/avatars')){
+					fs.mkdirSync('public/images/avatars');
+				}
+				var root = process.cwd();
+				if(user.avatar !== '/images/avatar-default.svg'){
+					fs.unlinkSync(root+'/public'+user.avatar);
+				}
+				var url = '/images/avatars/' + username+'_'+ new Date().getTime() + '.'+ext;
+				fs.renameSync(req.files.avatar.path,'public'+url);
+				req.body.avatar = url;
+				User.setting(username,req.body,function(err,doc){
+					if(doc.result.ok === 1){
+						for(var i in req.body){
+							user[i] = req.body[i];
+						}
+						res.render('user_setting', {
+							title: '用户设置',
+							currentuser: user,
+							msg:'修改成功',
+							setting:true
+						});
+					}
+				});
+			}else{
+				User.setting(username,req.body,function(err,doc){
+					if(doc.result.ok === 1){
+						for(var i in req.body){
+							user[i] = req.body[i];
+						}
+						res.render('user_setting', {
+							title: '用户设置',
+							currentuser: user,
+							msg:'修改成功',
+							setting:true
+						});
+					}
+				});
 			}
-		});
-	}
+			
+		}
+	})
 });
 // 获取所有用户列表
 router.get('/user/list', function(req, res) {
@@ -127,7 +162,7 @@ router.post('/user/signin', function(req, res) {
 // 用户登出
 router.get('/logout', function(req, res) {
 	delete req.session.user;
-	res.redirect(req.session.preUrl[1]);
+	res.redirect('/');
 });
 
 // 用户登录成功现实页面

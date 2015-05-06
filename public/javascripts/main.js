@@ -34,9 +34,34 @@ $(function(){
 				success:function(data){
 					if(data.success){
 						$('#signupModal').hide();
-						window.location = window.location.origin+data.pathname;
+						window.location = '/';
 					}else{
 						$alert.text('用户已经存在').show();
+					}
+				}
+			});
+		}
+	});
+	$('#signinbtn').click(function(){
+		var target = $(this);
+		var $form = $('#signinModal form');
+		var	username = $('#signinName');
+		var password = $('#signinPassword');
+		var $alert = $('#signinModal .alert').hide();
+		if(username.val() === '' || password.val() === ''){
+			$alert.text('信息输入不完整!').show();
+		}else{
+			$.ajax({
+				url:'/user/signin',
+				type:'post',
+				dataType:'json',
+				data:$form.serialize(),
+				success:function(data){
+					if(data.success){
+						$('#signinModal').hide();
+						window.location = window.location.origin+data.pathname;
+					}else{
+						$alert.text('用户名或密码错误').show();
 					}
 				}
 			});
@@ -76,11 +101,33 @@ $(function(){
 	//     clone.appendTo(form);
 	//     console.log(form)
 	// });
-	$('form#user_setting').onSubmit = function(){
-		var avatar = $('input.avatar');
-		if(input.val() !== '' &&  !checkImgType(input.val())){
-			alert("格式不正确,只能上传格式为gif|jpeg|jpg|png|bmp！");  
-            return false;  
+	if($('form#user_setting')){
+		$('form#user_setting')[0].onsubmit = function(){
+			var avatar = $('input.avatar');
+			var sex = $('input[name="sex"]');
+			if(avatar.val() !== '' &&  !checkImgType(avatar.val())){
+				alert("格式不正确,只能上传格式为gif|jpeg|jpg|png|bmp！");  
+	            return false;  
+			}
+			if(!sex[0].checked && !sex[1].checked){
+				alert('请选择性别!')
+				return false;
+			}
+		}
+	}
+	if($('form#changePwd')){
+		$('form#changePwd')[0].onsubmit = function(){
+			var oldpwd = $('#oldPassword');
+			var newpwd = $('#newPassword');
+			var repwd = $('#reNewPassword');
+			if(oldpwd.val() === '' || newpwd.val() === ''){
+				alert('信息输入不完整!');
+				return false;
+			}
+			if(newpwd.val() !== repwd.val()){
+				alert('两次输入密码不一致!');
+				return false;
+			}
 		}
 	}
 
