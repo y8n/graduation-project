@@ -101,7 +101,7 @@ $(function(){
 	//     clone.appendTo(form);
 	//     console.log(form)
 	// });
-	if($('form#user_setting')){
+	if($('form#user_setting').length >0){
 		$('form#user_setting')[0].onsubmit = function(){
 			var avatar = $('input.avatar');
 			var sex = $('input[name="sex"]');
@@ -115,7 +115,7 @@ $(function(){
 			}
 		}
 	}
-	if($('form#changePwd')){
+	if($('form#changePwd').length >0){
 		$('form#changePwd')[0].onsubmit = function(){
 			var oldpwd = $('#oldPassword');
 			var newpwd = $('#newPassword');

@@ -16,10 +16,7 @@ block content
                   .col-md-3(style="margin-top:10px;width:220px;")
                     .thumbnail(style="height:360px;width:200px")
                       a(href="/m/#{item._id}")
-                        if item.poster.indexOf('http:') >-1
-                          img(src="#{item.poster}",alt="#{item.title}",style="height:255px;width:180px")
-                        else
-                          img(src="/upload/#{item.poster}",alt="#{item.title}",style="height:255px;width:180px")
+                        img(src="#{item.poster}",alt="#{item.title}",style="height:255px;width:180px")
                       .caption
                         h5.text-center= item.title
                         a.btn.btn-primary(href="/m/#{item._id}",role="button",style="display:block;") 观看预告片 

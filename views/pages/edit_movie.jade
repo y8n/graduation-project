@@ -9,7 +9,7 @@ html
     include ../includes/header
     .container
       .col-md-6.col-md-offset-1
-        form#new_movie_form.form-horizontal(method="post",action="/post/new_movie")
+        form#new_movie_form.form-horizontal(method="post",action="/post/new_movie",enctype='multipart/form-data')
           input(type="hidden",name="_id",value="#{movie._id}")
           .form-group
             label.col-sm-2.control-label(for="douban") 豆瓣同步
@@ -122,10 +122,10 @@ html
             label.col-sm-2.control-label(for="inputPoster") 海报地址
             .col-sm-7
               input#inputPoster.form-control(type="text",name="poster",value="#{movie.poster}")
-          //- .form-group
-          //-   label.col-sm-2.control-label(for="uploadPoster") 海报上传
-          //-   .col-sm-7
-          //-     input#uploadPoster.form-control(type="file",name="uploadPoster")
+          .form-group
+            label.col-sm-2.control-label(for="uploadPoster") 海报上传
+            .col-sm-7
+              input#uploadPoster.form-control(type="file",name="uploadPoster")
           .form-group
             label.col-sm-2.control-label(for="inputFlash") 片源地址
             .col-sm-7

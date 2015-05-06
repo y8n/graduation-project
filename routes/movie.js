@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var multipart = require('connect-multiparty');
 var Movie = require('../models/movie');
+var fs = require('fs');
 var Category = require('../models/category');
 
 
@@ -64,13 +66,22 @@ router.get('/movie/update/:id',function(req,res){
 	
 });
 // 提交表单
-router.post('/post/new_movie',function(req,res){
+router.post('/post/new_movie',multipart(),function(req,res){
 	if(typeof req.body.category === 'string'){
 		var temp = req.body.category;
 		req.body.category = new Array(req.body.category);
-
 	}
 	var movie = new Movie(req.body);
+	var poster = req.files.uploadPoster;
+	if(poster.name !== ''){
+		var ext = poster.type.substring(poster.type.lastIndexOf('/') +1);
+		if(!fs.existsSync('public/images/posters')){
+			fs.mkdirSync('public/images/posters');
+		}
+		var url = '/images/posters/' + new Date().getTime() + '.'+ext;
+		fs.renameSync(poster.path,'public'+url);
+		movie.poster = url;	
+	}
 	if(req.body._id ===''){
 		movie.save(function(err,doc){
 			res.redirect('/m/'+doc._id);
