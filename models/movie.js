@@ -53,6 +53,11 @@ Movie.prototype.save = function(callback) {
 Movie.findById = function (id,callback){
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
+		try{
+			var _id = ObjectID(id);
+		}catch(e){
+			return callback(false,null);
+		}
 		movies.find({_id:ObjectID(id)}).toArray(function(err,doc){
 			db.close();
 			if(err) return callback(err);

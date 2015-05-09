@@ -11,36 +11,38 @@ block content
               h3 评论区
             .panel-body
               ul.media-list
-                //- each comment in comments         
-                  li.media
-                    .pull-left
-                      a.comment(href="#comments",data-cid="#{comment._id}",data-tid="#{comment.from._id}")
-                        img(src="#{comment.from.avatar}",style="width:55px;height:55px",alt="#{comment.from.username}")
-                    .media-body
-                      h4.media-heading #{comment.from.username}
-                      p #{comment.content}
-                      if comment.reply && comment.reply.length > 0
-                        each reply in comment.reply
-                          .media
-                            .pull-left
-                              a.comment(href="#comments",data-cid="#{comment._id}",data-tid="#{reply.from._id}")
-                                img(src="#{reply.from.avatar}",style="width:50px;height:50px",alt="#{reply.from.username}")   
-                            .media-body
-                              h4.media-heading 
-                                |#{reply.from.username}
-                                span.text-info &nbsp;回复&nbsp;
-                                | #{reply.to.username}:
-                              p  #{reply.content}
-                    hr
+                if(comments)
+                  each comment in comments         
+                    li.media
+                      .pull-left
+                        a.comment(href="#comments",data-cid="#{comment._id}",data-username="#{comment.from.username}",data-tid="#{comment.from._id}",onClick="reply(this)")
+                          img(src="#{comment.from.avatar}",style="width:55px;height:55px",alt="#{comment.from.username}")
+                      .media-body
+                        h4.media-heading #{comment.from.username}
+                        p #{comment.content}
+                        if comment.reply && comment.reply.length > 0
+                          each reply in comment.reply
+                            .media
+                              .pull-left
+                                a.comment(href="#comments",data-cid="#{comment._id}",data-tid="#{reply.from._id}")
+                                  img(src="#{reply.from.avatar}",style="width:50px;height:50px",alt="#{reply.from.username}")   
+                              .media-body
+                                h4.media-heading 
+                                  |#{reply.from.username}
+                                  span.text-info &nbsp;回复&nbsp;
+                                  | #{reply.to.username}:
+                                p  #{reply.content}
+                      hr
             #comments
               form#commentForm(method="post",action="/comment/new")
                 input(type="hidden",value="#{movie._id}",name="movieId")
                 if user
                   input(type="hidden",value="#{user._id}",name="from")
                 .form-group
-                  textarea.form-control(row="3",name="content",placeholder="评论一下吧")
+                  textarea.commentContent.form-control(row="3",name="content",placeholder="评论一下吧")
                 if user  
-                  button.btn.btn-primary(type="submit") 评论
+                  button.btn-comment.btn.btn-primary(type="button") 评论
+                  button#cancelReply.btn.btn-success(type="button",style="display:none") 取消回复状态
                 else
                   a.btn.btn-warning(href="javascript:void(0)",data-toggle="modal",data-target="#signinModal") 登录后评论
         .col-md-5

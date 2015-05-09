@@ -128,7 +128,18 @@ User.changePassword = function(username,oldpwd,newpwd,callback){
 	});
 }
 
-
+User.findById = function(id,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		users.findOne({_id:ObjectID(id)},function(err,doc){
+			db.close();
+			if(err){
+				return callback(err);
+			}
+			callback(err,doc);
+		})
+	});
+}
 
 
 

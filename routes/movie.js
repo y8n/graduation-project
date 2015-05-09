@@ -4,6 +4,7 @@ var multipart = require('connect-multiparty');
 var Movie = require('../models/movie');
 var fs = require('fs');
 var Category = require('../models/category');
+var Comment = require('../models/comment');
 
 
 // movie detail
@@ -12,13 +13,16 @@ router.get('/m/:id',function(req,res){
 	Movie.findById(id,function(err,movie){
 		if(err) return console.log(err);
 		if(movie){
-			res.render('detail',{
-				title:movie.title,
-				movie:movie
+			Comment.findAllByMoiveId(id,function(err,comments){
+				res.render('detail',{
+					title:movie.title,
+					movie:movie,
+					comments:comments
+				})
 			})
 		}else{
 			res.render('detail',{
-				title:"电影详情页",
+				title:"电影详情页"
 			})
 		}
 	})

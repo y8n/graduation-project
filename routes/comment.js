@@ -6,6 +6,7 @@ var router = express.Router();
 router.post('/comment/new',function(req,res){
 	var _comment = req.body;
 	var movieId = _comment.movieId;
+	// console.log(_comment);
 	if(_comment.cid){
 		var reply = {
 			from:_comment.from,
@@ -17,16 +18,24 @@ router.post('/comment/new',function(req,res){
 				console.error(err);
 				return;
 			}
-			var _reply = comment.reply;
-			_reply.push(reply);
-			Comment.addReply(_comment.cid,_reply,function(err,comment){
+			Comment.addReply(comment,reply,function(err,reply){
 				if(err){
 					console.log(err);
 					return;
 				}
-				console.log(comment)
-				console.log("Reply insert success");
-				res.redirect('/m/'+_comment.movieId);
+				if(reply){
+					console.log("Reply insert success");
+					// res.redirect('/m/'+_comment.movieId);
+					res.send({
+						success:true,
+						reply:reply,
+						cid:comment._id
+					});
+				}else{
+					res.send({
+						success:false
+					});
+				}
 			});
 		})
 	}else{
@@ -37,7 +46,11 @@ router.post('/comment/new',function(req,res){
 				return;
 			}
 			console.log("Comment insert success");
-			res.redirect('/m/'+_comment.movieId);
+			// res.redirect('/m/'+_comment.movieId);
+			res.send({
+				success:true,
+				comment:comment
+			});
 		});
 	}
 })
