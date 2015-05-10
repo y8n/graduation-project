@@ -25,3 +25,25 @@
 	position: relative;
 	left: 20px;
 }
+#score{
+	position: relative;
+}
+#scoreForm .btn-score{
+	position: absolute;
+	bottom: 5px;
+	left: 100px;
+	width: 100px;
+}
+.star{
+	position: relative;
+	left: 50px;
+	top: -25px;
+}
+.star span{
+	margin: 5px;
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}

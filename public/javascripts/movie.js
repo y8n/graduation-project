@@ -207,3 +207,31 @@ function reply(self){
 		}).appendTo('#commentForm')
 	}
 } 
+var changeScore = function(self){
+	var value = parseInt(self.value);
+	var score = $('#score span.score').text(value); // 改变得分展示
+	var stars = $('#score .star > span');
+	stars.css('backgroundImage','url(/images/star-empty.png)');
+	var m = parseInt(value/2,10);
+	for(var i=0;i<m;i++){
+		stars.eq(i).css('backgroundImage','url(/images/star-full.png)');
+	}
+	if(m !== value/2){
+		stars.eq(m).css('backgroundImage','url(/images/star-half.png)');
+	}
+}
+var doScore = function(self){
+	var form = $('#scoreForm');
+	var data = form.serialize();
+	$.ajax({
+		url:'/movie/score',
+		method:'POST',
+		data:data,
+		dataType:'json',
+		success:function(result){
+			var h4 = $('#score h4').text('电影评分(当前得分:'+result.score+'分)');
+			alert(result.msg);
+		}
+	});
+}
+

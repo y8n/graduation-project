@@ -14,6 +14,8 @@ function Movie(movie) {
 	this.summary = movie.summary;
 	this.category = movie.category;
 	this.year = movie.year;
+	this.score = 5
+	this.user = movie.user_id
 }
 
 module.exports = Movie;
@@ -33,7 +35,9 @@ Movie.prototype.save = function(callback) {
 		flash: this.flash,
 		summary: this.summary,
 		category: this.category,
-		year: this.year
+		year: this.year,
+		score:this.score,
+		user:this.user
 	}
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
@@ -125,7 +129,9 @@ Movie.prototype.update = function update(id,callback){
 	    flash : this.flash,
 	    summary : this.summary,
 	    language : this.language,
-	    category : this.category
+	    category : this.category,
+	    socre:this.score,
+	    user:this.user
 	}
 	MongoClient.connect(url,function(err,db){
 		db.collection('movies').update({_id:ObjectID(id)},{$set:_movie},function(err,doc){
@@ -139,6 +145,31 @@ Movie.prototype.update = function update(id,callback){
 				callback(err,null);
 			}
 		});
+	})
+}
+//为指定电影添加用户评分
+Movie.addScore = function(id,userId,score,callback){
+	Movie.findById(id,function(err,movie){
+		if(movie.scores && movie.scores.indexOf(userId) !== -1){
+			return callback(err,true,false);
+		}
+		var scores;
+		if(!movie.scores){
+			scores = [userId];
+		}else{
+			scores = movie.scores;
+			scores.push(userId);
+		}
+		score = (movie.score+score)/2;
+		MongoClient.connect(url,function(err,db){
+			db.collection('movies').update({_id:ObjectID(id)},{$set:{scores:scores,score:Math.round(score)}},function(err,doc){
+				if(doc.result.ok ===1 && doc.result.n ===1){
+					callback(err,false,true,Math.round(score));
+				}else{
+					callback(err,false,false);
+				}
+			});
+		})
 	})
 }
 

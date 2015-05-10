@@ -11,6 +11,8 @@ html
       .col-md-6.col-md-offset-1
         form#new_movie_form.form-horizontal(method="post",action="/post/new_movie",enctype='multipart/form-data')
           input(type="hidden",name="_id",value="#{movie._id}")
+          - if(user)
+            input(type="hidden",name="user_id",value="#{user._id}")
           .form-group
             label.col-sm-2.control-label(for="douban") 豆瓣同步
             .col-sm-7

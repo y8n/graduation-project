@@ -46,7 +46,7 @@ block content
                 else
                   a.btn.btn-warning(href="javascript:void(0)",data-toggle="modal",data-target="#signinModal") 登录后评论
         .col-md-5
-          .dl-horizontal
+          .dl-horizontal(style="height:600px;")
             dt 电影名字
             dd #{movie.title} 
             dt 导演
@@ -64,6 +64,31 @@ block content
             dt 简介
             dd
               span.summary #{movie.summary}
+          #score.col-md-offset-4.panel.panel-default
+            .panel-heading
+              h4 电影评分(当前得分:#{movie.score}分)
+            .panel-body
+              form#scoreForm(method="post",action="/movie/score")
+                input(type="hidden",value="#{movie._id}",name="movieId")
+                if user
+                  input(type="hidden",value="#{user._id}",name="from")
+                .form-group
+                  label(for="scoreInput") 滑动评分
+                  input#scoreInput(type="range",onChange="changeScore(this)",defaultValue="5",min="0",max="10",name="score")
+                  span &nbsp;&nbsp;&nbsp;
+                  span.score.text-info 5
+                  span 分
+                if user 
+                  button.btn-score.btn.btn-primary(type="button",onClick="doScore(this)") 打分
+                else
+                  a.btn-score.btn.btn-warning(href="javascript:void(0)",data-toggle="modal",data-target="#signinModal") 先登录
+              .star
+                span(style="background-image: url(/images/star-full.png)")
+                span(style="background-image: url(/images/star-full.png)")
+                span(style="background-image: url(/images/star-half.png)")
+                span(style="background-image: url(/images/star-empty.png)")
+                span(style="background-image: url(/images/star-empty.png)")
+
       else
         div(style="height:400px")
           .col-md-6

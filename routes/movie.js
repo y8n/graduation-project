@@ -46,7 +46,8 @@ router.get('/movie/new',function(req,res){
 			year:"",
 			summary:"",
 		},
-		hot_movies:hot_movies
+		hot_movies:hot_movies,
+		user:req.session.user
 	})
 });
 
@@ -149,7 +150,35 @@ router.post('/admin/movielist',function(req,res){
             }
         });
     }
+});
+// 处理电影评分
+router.post('/movie/score',function(req,res){
+	var movieId = req.body.movieId;
+	var from = req.body.from;
+	var score = parseInt(req.body.score);
+	Movie.addScore(movieId,from,score,function(err,exists,success,new_score){
+		if(err) return console.log(err);
+		if(exists){
+			res.send({
+				success:false,
+				msg:'用户已经评论过该电影，不能重复评论!'
+			});
+		}else if(success){
+			res.send({
+				success:true,
+				msg:'评分成功，感谢支持!',
+				score:new_score
+			});
+		}else{
+			res.send({
+				success:true,
+				msg:'评分失败，请稍后重试!'
+			});
+		}
+	});
+
 })
+
 module.exports = router;
 
 var hot_movies = [
