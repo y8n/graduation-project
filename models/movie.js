@@ -130,7 +130,7 @@ Movie.prototype.update = function update(id,callback){
 	    summary : this.summary,
 	    language : this.language,
 	    category : this.category,
-	    socre:this.score,
+	    score:this.score,
 	    user:this.user
 	}
 	MongoClient.connect(url,function(err,db){

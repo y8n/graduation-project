@@ -123,7 +123,7 @@ html
           .form-group
             label.col-sm-2.control-label(for="inputPoster") 海报地址
             .col-sm-7
-              input#inputPoster.form-control(type="text",name="poster",value="#{movie.poster}")
+              input#inputPoster.form-control(type="text",name="poster",value="#{movie.poster}",placeholder="百度中的图片设置有防盗链，不建议使用")
           .form-group
             label.col-sm-2.control-label(for="uploadPoster") 海报上传
             .col-sm-7
@@ -146,43 +146,42 @@ html
             .col-sm-2.col-md-offset-2
               button#add-movie.btn.btn-success.btn-lg(type="submit") 录入
       .col-md-4(style="position:relative;top:-50px;")
-        h3.text-center.panel.panel-heading.text-success 热门电影榜
-        .panel-group#accordion(role="tablist",aria-multiselectable="true")
-          .panel.panel-default
-            .panel-heading(role="tab",id="heading0")
-              h6.panel-title
-                a(data-toggle="collapse",data-parent="#accordion",href="#panel0",aria-expanded="true",aria-controls="panel0")
-                  i.badge.clearfix.pull-left 1
-                  p.pull-left &nbsp;#{hot_movies[0].title}
-                  p.text-right #{hot_movies[0].grade}分
-            .panel-collapse.collapse.in(id="panel0",role="tabpanel",aria-labelledby="heading0") 
-              .panel-body 
-                img.sub-img.img-thumbnail.pull-left(alt="战狼",src="http://asd.jpg")
-                .hot-movie-content
-                  p 导演：#{hot_movies[0].director}
-                  p 主演：#{hot_movies[0].actors}
-                  p 电影类型：#{hot_movies[0].category}
-                  p 豆瓣评分：#{hot_movies[0].grade}分
-          - for(var i=1;i<hot_movies.length;i++)
+        - if (hot_movies)
+          h3.text-center.panel.panel-heading.text-success 豆瓣TOP250
+          .panel-group#accordion(role="tablist",aria-multiselectable="true")
             .panel.panel-default
-              .panel-heading(role="tab",id="heading#{i}")
+              .panel-heading(role="tab",id="heading0")
                 h6.panel-title
-                  a(data-toggle="collapse",data-parent="#accordion",href="#panel#{i}",aria-expanded="false",aria-controls="panel#{i}")
-                    i.badge.clearfix.pull-left #{i+1}
-                    p.pull-left &nbsp;#{hot_movies[i].title}
-                    p.text-right #{hot_movies[i].grade}分
-              .panel-collapse.collapse(id="panel#{i}",role="tabpanel",aria-labelledby="heading#{i}") 
+                  a(data-toggle="collapse",data-parent="#accordion",href="#panel0",aria-expanded="true",aria-controls="panel0")
+                    i.badge.clearfix.pull-left 1
+                    p.pull-left &nbsp;#{hot_movies[0].title}
+                    p.text-right #{hot_movies[0].grade}分
+              .panel-collapse.collapse.in(id="panel0",role="tabpanel",aria-labelledby="heading0") 
                 .panel-body 
-                  img.sub-img.img-thumbnail.pull-left(alt="战狼",src="http://asd.jpg")
+                  img.sub-img.img-thumbnail.pull-left(alt="#{hot_movies[0].title}",src="#{hot_movies[0].poster}")
                   .hot-movie-content
-                    p 导演：#{hot_movies[i].director}
-                    p 主演：#{hot_movies[i].actors}
-                    p 电影类型：#{hot_movies[i].category}
-                    p 豆瓣评分：#{hot_movies[i].grade}分
-          .panel.panel-default
-            .panel-heading(role="tab",id="more")
-              .panel-title.text-success.text-center
-                a(href="#more") 查看更多
+                    p 导演：#{hot_movies[0].director}
+                    p 主演：#{hot_movies[0].actors}
+                    p 电影类型：#{hot_movies[0].category}
+            - for(var i=1;i<hot_movies.length;i++)
+              .panel.panel-default
+                .panel-heading(role="tab",id="heading#{i}")
+                  h6.panel-title
+                    a(data-toggle="collapse",data-parent="#accordion",href="#panel#{i}",aria-expanded="false",aria-controls="panel#{i}")
+                      i.badge.clearfix.pull-left #{i+1}
+                      p.pull-left &nbsp;#{hot_movies[i].title}
+                      p.text-right #{hot_movies[i].grade}分
+                .panel-collapse.collapse(id="panel#{i}",role="tabpanel",aria-labelledby="heading#{i}") 
+                  .panel-body 
+                    img.sub-img.img-thumbnail.pull-left(alt="#{hot_movies[i].title}",src="#{hot_movies[i].poster}")
+                    .hot-movie-content
+                      p 导演：#{hot_movies[i].director}
+                      p 主演：#{hot_movies[i].actors}
+                      p 电影类型：#{hot_movies[i].category}
+            .panel.panel-default
+              .panel-heading(role="tab",id="more")
+                .panel-title.text-success.text-center
+                  a(href="http://movie.douban.com/top250",target="_blank") 查看更多
 
     script(src="/javascripts/movie.js",type="text/javascript")
     include ../includes/footer
