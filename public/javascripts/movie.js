@@ -145,7 +145,7 @@
 		var html = [
 			'<div class="media">',
 				'<div class="pull-left">',
-					'<a class="comment" data-cid="'+cid+'" data-tid="'+reply.from._id+'">',
+					'<a class="comment" data-cid="'+cid+'" data-tid="'+reply.from._id+'" data-username="'+reply.from.username+'"  onClick="reply(this)">',
 						'<img src="'+reply.from.avatar+'" style="width:50px;height:50px" alt="'+reply.from.username+'">',
 					'</a>',
 				'</div>',

@@ -15,7 +15,7 @@ block content
                 each item in cat.movies
                   .col-md-3(style="margin-top:10px;width:220px;")
                     .thumbnail(style="height:360px;width:200px")
-                      a(href="/m/#{item._id}")
+                      a(href="/m/#{item._id}",style="display:block;height:255px;width:180px")
                         img(src="#{item.poster}",alt="#{item.title}",style="height:255px;width:180px")
                       .caption
                         h5.text-center= item.title
