@@ -229,7 +229,9 @@ var doScore = function(self){
 		data:data,
 		dataType:'json',
 		success:function(result){
-			var h4 = $('#score h4').text('电影评分(当前得分:'+result.score+'分)');
+			if(result.success){
+				$('#score h4').text('电影评分(当前得分:'+result.score+'分)');
+			}
 			alert(result.msg);
 		}
 	});
