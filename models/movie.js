@@ -2,6 +2,7 @@ var mongodb = require('mongodb'),
 	MongoClient = mongodb.MongoClient,
 	ObjectID = mongodb.ObjectID,
 	Category = require('./category'),
+	Comment = require('./comment'),
 	url = 'mongodb://localhost:27017/movist';
 function Movie(movie) {
 	this.title = movie.title;
@@ -91,13 +92,25 @@ Movie.findAll = function(callback){
  * callback(err,movie)
  * 即将被删除的电影
  */
-Movie.removeById = function(id,callback){
+Movie.removeById = function(id,categories,callback){
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
-		movies.remove({_id:ObjectID(id)},function(err,doc){
-			db.close();
+		// 删除movies collection 中的
+		movies.remove({_id:ObjectID(id)},function(err,DOC){
 			if(err) return callback(err);
-			callback(err,doc.result.n);
+			// 删除电影类别里的
+			(function it(n){
+				if(n >= categories.length){
+					// 删除评论里面的
+					Comment.removeByMId(id,function(err,doc){
+						callback(err,DOC.result.n);
+					});		
+				}else{
+					Category.removeMovie(categories[n],id,function(err,doc){
+						it(++n);
+					})
+				}
+			})(0);
 		})
 	});
 }

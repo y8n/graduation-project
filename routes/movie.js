@@ -5,6 +5,7 @@ var Movie = require('../models/movie');
 var fs = require('fs');
 var Category = require('../models/category');
 var Comment = require('../models/comment');
+var https = require('https');
 
 
 // movie detail
@@ -28,52 +29,13 @@ router.get('/m/:id', function(req, res) {
 	})
 });
 
+var HOT_MOVIES;
 // add movie
 
 router.get('/movie/new', function(req, res) {
 	var RES = res;
-	var https = require('https');
 	var result = '';
-	https.get('https://api.douban.com/v2/movie/top250', function(res) {
-		res.on('data', function(d) {
-			// console.log(d.toString())
-			result += d.toString();
-			// process.stdout.write(d);
-		});
-		res.on('end', function(data) {
-			result = JSON.parse(result);
-			var movies = result.subjects.splice(0,10),hot_movies = [];
-			movies.forEach(function(movie){
-				var temp = {
-					title:movie.title,
-					director:movie.directors[0].name,
-					actors:[movie.casts[0].name,movie.casts[1].name],
-					grade:movie.rating.average,
-					category:movie.genres,
-					poster:movie.images.small
-				}
-				hot_movies.push(temp);
-			});
-			RES.render('edit_movie', {
-				title: "添加新电影",
-				movie: {
-					_id: "",
-					title: "",
-					director: "",
-					actors: [],
-					country: "",
-					language: "",
-					category: "",
-					poster: "",
-					flash: "",
-					year: "",
-					summary: "",
-				},
-				hot_movies: hot_movies,
-				user: req.session.user
-			})
-		})
-	}).on('error', function(e) {
+	if(HOT_MOVIES){
 		RES.render('edit_movie', {
 			title: "添加新电影",
 			movie: {
@@ -89,28 +51,145 @@ router.get('/movie/new', function(req, res) {
 				year: "",
 				summary: "",
 			},
+			hot_movies: HOT_MOVIES,
 			user: req.session.user
 		})
-	});
+	}else{
+		https.get('https://api.douban.com/v2/movie/top250', function(res) {
+			res.on('data', function(d) {
+				// console.log(d.toString())
+				result += d.toString();
+				// process.stdout.write(d);
+			});
+			res.on('end', function(data) {
+				result = JSON.parse(result);
+				var movies = result.subjects.splice(0,10),hot_movies = [];
+				movies.forEach(function(movie){
+					var temp = {
+						title:movie.title,
+						director:movie.directors[0].name,
+						actors:[movie.casts[0].name,movie.casts[1].name],
+						grade:movie.rating.average,
+						category:movie.genres,
+						poster:movie.images.small
+					}
+					hot_movies.push(temp);
+				});
+				HOT_MOVIES = hot_movies;
+				RES.render('edit_movie', {
+					title: "添加新电影",
+					movie: {
+						_id: "",
+						title: "",
+						director: "",
+						actors: [],
+						country: "",
+						language: "",
+						category: "",
+						poster: "",
+						flash: "",
+						year: "",
+						summary: "",
+					},
+					hot_movies: HOT_MOVIES,
+					user: req.session.user
+				})
+			})
+		}).on('error', function(e) {
+			RES.render('edit_movie', {
+				title: "添加新电影",
+				movie: {
+					_id: "",
+					title: "",
+					director: "",
+					actors: [],
+					country: "",
+					language: "",
+					category: "",
+					poster: "",
+					flash: "",
+					year: "",
+					summary: "",
+				},
+				user: req.session.user
+			})
+		});
+	}
 });
 
 // update movie
 router.get('/movie/update/:id', function(req, res) {
+	var RES = res;
 	var id = req.params.id;
-	Movie.findById(id, function(err, movie) {
-		if (err) return console.log(err);
-		if (movie) {
-			res.render('edit_movie', {
-				title: "更新电影信息-" + movie.title,
-				movie: movie,
-				hot_movies: hot_movies
+	var result = '';
+	if(HOT_MOVIES){
+		Movie.findById(id, function(err, movie) {
+			if (err) return console.log(err);
+			if (movie) {
+				res.render('edit_movie', {
+					title: "更新电影信息-" + movie.title,
+					movie: movie,
+					hot_movies: HOT_MOVIES
+				})
+			} else {
+				res.render('detail', {
+					title: "电影详情页",
+				})
+			}
+		})
+	}else{
+		https.get('https://api.douban.com/v2/movie/top250', function(res) {
+			res.on('data', function(d) {
+				// console.log(d.toString())
+				result += d.toString();
+				// process.stdout.write(d);
+			});
+			res.on('end', function(data) {
+				result = JSON.parse(result);
+				var movies = result.subjects.splice(0,10),hot_movies = [];
+				movies.forEach(function(movie){
+					var temp = {
+						title:movie.title,
+						director:movie.directors[0].name,
+						actors:[movie.casts[0].name,movie.casts[1].name],
+						grade:movie.rating.average,
+						category:movie.genres,
+						poster:movie.images.small
+					}
+					hot_movies.push(temp);
+				});
+				HOT_MOVIES = hot_movies;
+				Movie.findById(id, function(err, movie) {
+					if (err) return console.log(err);
+					if (movie) {
+						RES.render('edit_movie', {
+							title: "更新电影信息-" + movie.title,
+							movie: movie,
+							hot_movies: HOT_MOVIES
+						})
+					} else {
+						RES.render('detail', {
+							title: "电影详情页",
+						})
+					}
+				})
 			})
-		} else {
-			res.render('detail', {
-				title: "电影详情页",
+		}).on('error', function(e) {
+			Movie.findById(id, function(err, movie) {
+				if (err) return console.log(err);
+				if (movie) {
+					RES.render('edit_movie', {
+						title: "更新电影信息-" + movie.title,
+						movie: movie,
+					})
+				} else {
+					RES.render('detail', {
+						title: "电影详情页",
+					})
+				}
 			})
-		}
-	})
+		});
+	}
 
 });
 // 提交表单
@@ -177,8 +256,9 @@ router.get('/admin/movielist', function(req, res) {
 // 删除电影信息
 router.post('/admin/movielist', function(req, res) {
 	var id = req.query.id;
+	var categories  = req.query.cat.split(',');
 	if (id) {
-		Movie.removeById(id, function(err, movie) {
+		Movie.removeById(id, categories,function(err, movie) {
 			if (err) {
 				console.error(err);
 				return;

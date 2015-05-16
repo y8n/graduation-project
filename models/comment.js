@@ -117,7 +117,18 @@ Comment.addReply = function addReply(comment,reply,callback){
 		})
 	});
 }
-
+// 删除指定电影id的评论信息
+Comment.removeByMId = function(id,callback){
+	MongoClient.connect(url,function(err,db){
+		var comments = COMMENT_COLLECTION || db.collection('comments');
+		comments.remove({movieId:ObjectID(id)},function(err,doc){
+			if(err){
+				return callback(err);
+			}
+			callback(err,doc);
+		})
+	});
+}
 
 
 

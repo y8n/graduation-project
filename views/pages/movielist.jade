@@ -31,7 +31,7 @@ block content
                 td: a(target="_blank",href="/m/#{item._id}") 查看
                 td: a(target="_blank",href="/movie/update/#{item._id}") 修改
                 td
-                  button.btn.btn-danger.del(type="button",data-id="#{item._id}") 删除
+                  button.btn.btn-danger.del(type="button",data-id="#{item._id}",data-category="#{item.category}") 删除
       ul.pagination.panel-pagination.pull-right
         - for (var i =1;i<=totalPage;i++){
         -   if(currentPage == i){
