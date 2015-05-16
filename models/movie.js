@@ -46,8 +46,9 @@ Movie.prototype.save = function(callback) {
 		var movies = db.collection('movies');
 		movies.insert(_movie,function(err,doc){
 			if(err) return callback(err);
-			Category.save(doc.ops[0],function(){
-				callback(err,doc.ops[0]);
+			var movie = doc.ops[0];
+			Category.save(movie,function(){
+				callback(err,movie);
 			})
 		})
 	});

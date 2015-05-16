@@ -5,6 +5,7 @@ var Movie = require('../models/movie');
 var fs = require('fs');
 var Category = require('../models/category');
 var Comment = require('../models/comment');
+var User = require('../models/user');
 var https = require('https');
 
 
@@ -210,8 +211,12 @@ router.post('/post/new_movie', multipart(), function(req, res) {
 		movie.poster = url;
 	}
 	if (req.body._id === '') {
-		movie.save(function(err, doc) {
-			res.redirect('/m/' + doc._id);
+		movie.save(function(err, movie) {
+			var user = req.session.user;
+			User.addOrderMovie(user._id,movie._id,function(err,success,user){
+				req.session.user = user;
+				res.redirect('/m/' + movie._id);
+			})
 		})
 	} else {
 		function contains(arr, ele) {
@@ -292,6 +297,7 @@ router.post('/movie/score', function(req, res) {
 				msg: '用户已经评论过该电影，不能重复评论!'
 			});
 		} else if (success) {
+			req.session.user = user;
 			res.send({
 				success: true,
 				msg: '评分成功，感谢支持!',

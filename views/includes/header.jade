@@ -9,6 +9,11 @@
             a(href="/") 首页
           li
             a(href="/movie/new") 添加新电影
+          if user && user.role === 2
+            li
+              a(href="/user/order?uId=#{user._id}") 我的订阅
+              if user.orderMovies.length >0
+                .red-point
           if user && user.role === 1
             li
               a(href="/admin/movielist?p=1") 所有电影列表
@@ -18,24 +23,21 @@
               a(href="/admin/category/list") 电影类型管理
         if user
           ul.nav.navbar-nav.navbar-right
-            li.active
-              a(href="/u/#{user.username}") 欢迎您,#{user.username}
-            li
-              a(href="/logout") 登出
+            li.dropdown
+              a.dropdown-toggle(href="jaavascript:void(0)",data-toggle="dropdown",role="button") 欢迎您,#{user.username}
+                span.caret
+              ul.dropdown-menu(role="menu")
+                li(role="presentation")
+                  a(role="menuitem",tabindex="-1",href="/u/#{user.username}") 用户设置
+                li.divider
+                li(role="presentation")
+                  a(role="menuitem",tabindex="-1",href="/logout") 登出
         else
-          //- form.navbar-form.navbar-right(method="post",action="/user/signin")
-          //-   .form-group
-          //-     input.form-control(type="text",name="username",placeholder="Username")
-          //-   .form-group
-          //-     input.form-control(type="password",name="password",placeholder="Password")
-          //-   button.btn.btn-primary(type="submit") 登录
           ul.nav.navbar-nav.navbar-right
             li
               a(href="javascript:void(0)",data-toggle="modal",data-target="#signinModal") 登录
             li
               a(href="javascript:void(0)",data-toggle="modal",data-target="#signupModal") 注册
-          //- button.btn.btn-primary.navbar-right(type="button",data-toggle="modal",data-target="#signinModal") 登陆
-          //- button.btn.btn-primary.navbar-right(type="button",data-toggle="modal",data-target="#signupModal") 注册
     h1= title
     form(method="get",action="/results",style="top:-50px;position:relative")
       .input-group.col-sm-4.pull-right

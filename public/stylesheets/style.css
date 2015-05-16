@@ -70,3 +70,22 @@
 	width: 120px;
 	margin-left: -60px;
 }
+.movie-order{
+	margin-left:30px;
+}
+.movie-order .thumbnail{
+	width: 160px;
+	height: 200px;
+}
+.order{
+	width:100%;
+}
+div.red-point{
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: red;
+	position: absolute;
+	right: 5px;
+	top: 12px;
+}

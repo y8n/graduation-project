@@ -6,7 +6,7 @@ $(function(){
 		$nav.children().eq(0).addClass('active');
 	}else if(url === '/movie/new'){
 		$nav.children().eq(1).addClass('active');
-	}else if(url === '/admin/movielist'){
+	}else if(url === '/admin/movielist' || url === '/user/order'){
 		$nav.children().eq(2).addClass('active');
 	}else if(url === '/user/list'){
 		$nav.children().eq(3).addClass('active');
@@ -76,31 +76,6 @@ $(function(){
 	    }  
 	    return true;  
 	} 
-	// $('#uploadAvatar').click(function(){
-	// 	var avatar = $('.preview');
-	// 	var input = $('input.avatar');
-	// 	if(input.val() !== '' &&  !checkImgType(input.val())){
-	// 		alert("格式不正确,只能上传格式为gif|jpeg|jpg|png|bmp！");  
- //            return false;  
-	// 	}
-	// 	var myform,form;
-	// 	if($('#upload-avatar').length === 0){
-	// 		myform = document.createElement("form");
-	// 		myform.id = 'upload-avatar';
-	// 		myform.action = '/avatar/upload';
-	// 		myform.method = 'post';
-	// 		myform.enctype = "multipart/form-data";  
-	// 	    myform.style.display = "none";
-	//     	document.body.appendChild(myform);
-	//     	form = $(myform);
-	// 	}else{
-	//     	form = $(myform);
-	// 		form.find('input').remove();
-	// 	}
-	//     var clone = input.clone(true);
-	//     clone.appendTo(form);
-	//     console.log(form)
-	// });
 	if($('form#user_setting').length >0){
 		$('form#user_setting')[0].onsubmit = function(){
 			var avatar = $('input.avatar');
@@ -130,5 +105,35 @@ $(function(){
 			}
 		}
 	}
-
+	var order = $('.order');
+	if(order.length > 0){
+		order.click(function(e){
+			var target = $(this);
+			var id = target[0].id
+			var u_id = target.data('u_id');
+			var category = target.data('cat');
+			var children = target.children();
+			$.ajax({
+				url:"/u/order",
+				method:"post",
+				data:{uId:u_id,category:category,id:id},
+				dataType:'JSON',
+				success:function(result){
+					if(id === "order-add"){ // 订阅->退订
+						target.removeClass('btn-success').addClass('btn-warning')[0].id = "order-minus";
+						children.eq(0).removeClass('glyphicon-plus').addClass('glyphicon-minus');
+						children.eq(1).text("退订");
+					}else if(id === "order-minus"){ // 退订->订阅
+						target.removeClass('btn-warning').addClass('btn-success')[0].id = "order-add";
+						children.eq(0).removeClass('glyphicon-minus').addClass('glyphicon-plus');
+						children.eq(1).text("订阅");
+					}
+					alert(result.msg);
+				},
+				error:function(result){
+					alert("操作失败！");
+				}
+			});
+		})
+	}
 });

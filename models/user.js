@@ -140,9 +140,115 @@ User.findById = function(id,callback){
 		})
 	});
 }
+// 用户订阅电影类型
+User.addOrder = function(id,category,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		User.findById(id,function(err,user){
+			user.orders.push(category);
+			users.update({_id:ObjectID(id)},{$set:{orders:user.orders}},function(err,doc){
+				db.close();
+				if(err){
+					return callback(err);
+				}
+				if(doc.result.ok && doc.result.nModified >0){
+					callback(err,true,user);
+				}else{
+					callback(err,false,user);
+				}
 
+			})
+		})
+	});
+}
+// 用户退订电影类型
+User.minusOrder = function(id,category,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		User.findById(id,function(err,user){
+			user.orders.splice(user.orders.indexOf(category),1);
+			users.update({_id:ObjectID(id)},{$set:{orders:user.orders}},function(err,doc){
+				db.close();
+				if(err){
+					return callback(err);
+				}
+				if(doc.result.ok && doc.result.nModified >0){
+					callback(err,true,user);
+				}else{
+					callback(err,false,user);
+				}
 
+			})
+		})
+	});
+}
+// 获取用户订阅电影
+User.getOrders = function(id,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		User.findById(id,function(err,user){
+			var o_movies=[],len,categories = {};//{"动作":[],"动画":[],"喜剧":[],"犯罪":[],"剧情":[],"爱情":[],"奇幻":[],"科幻":[],"惊悚":[],"战争":[]};
+			for(var order in user.orders){
+				categories[user.orders[order]] = []
+			}
+			if(user.orderMovies){
+				len = user.orderMovies.length;
+			}else{
+				len=0;
+			}
+			for(var i=0;i<len;i++){
+				o_movies.push(ObjectID(user.orderMovies[i]));
+			}
+			// 获取用户订阅的电影
+			db.collection('movies').find({_id:{$in:o_movies}}).toArray(function(err,movies){
+				// 清空
+				users.update({_id:ObjectID(id)},{$set:{orderMovies:[]}},function(err,doc){
+					db.close();
+					if(err){
+						return callback(err);
+					}
+					if(doc.result.ok && doc.result.nModified >0){
+						var keys = Object.keys(categories),cat;
+						for(var j=0;j<keys.length;j++){
+							cat = keys[j];
+							for(var k=0;k<movies.length;k++){
+								if(movies[k].category.indexOf(cat) !== -1){
+									categories[cat].push(movies[k]);
+								}
+							}
+						}
+						user.orderMovies = [];
+						callback(err,categories,user);
+					}else{
+						callback(err,null,user);
+					}
 
+				})
+			});
+		})
+	});
+}
+// 用户订阅电影项添加
+User.addOrderMovie = function(user_id,movie_id,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		User.findById(user_id,function(err,user){
+			user.orderMovies.push(movie_id);
+			users.update({_id:ObjectID(user_id)},{$set:{orderMovies:user.orderMovies}},function(err,doc){
+				db.close();
+				if(err){
+					return callback(err);
+				}
+				if(doc.result.ok && doc.result.nModified >0){
+					callback(err,true,user);
+				}else{
+					callback(err,false,user);
+				}
+
+			})
+		})
+	});
+}
 
 
 

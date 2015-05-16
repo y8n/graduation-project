@@ -7,10 +7,10 @@ var router = express.Router(),
 // index page
 router.get('/', function(req, res) {
 	Category.findAll(function(err,categories){
-	    res.render('index',{
-	    	title:'Welcome to Movist!',
-	    	categories:categories
-	    });
+        res.render('index',{
+            title:'Welcome to Movist!',
+            categories:categories
+        });
 	})
 });
 // 根据GET请求分页显示不同类型的电影

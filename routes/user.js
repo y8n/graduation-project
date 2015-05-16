@@ -29,6 +29,7 @@ router.post('/user/setting', multipart(), function(req, res) {
 					console.log(err);
 				}
 				if(exists){ // 修改成功
+					req.session.user = user;
 					res.render('user_setting', {
 						title: '用户设置',
 						currentuser: user,
@@ -64,6 +65,7 @@ router.post('/user/setting', multipart(), function(req, res) {
 						for(var i in req.body){
 							user[i] = req.body[i];
 						}
+						req.session.user = user;
 						res.render('user_setting', {
 							title: '用户设置',
 							currentuser: user,
@@ -78,6 +80,7 @@ router.post('/user/setting', multipart(), function(req, res) {
 						for(var i in req.body){
 							user[i] = req.body[i];
 						}
+						req.session.user = user;
 						res.render('user_setting', {
 							title: '用户设置',
 							currentuser: user,
@@ -175,6 +178,67 @@ router.get('/signin', function(req, res) {
 		title: "登录"
 	});
 });
+// 用户订阅电影类型
+router.post('/u/order',function(req,res){
+	var data = req.body;
+	var uId = data.uId;
+	var category = data.category;
+	if(data.id === "order-add"){ //add
+		User.addOrder(uId,category,function(err,ok,user){
+			if(err){
+				return console.log(err);
+			}
+			if(ok){
+				req.session.user = user;
+				res.send({
+					success:true,
+					msg:"电影类型订阅成功!"
+				});
+			}else{
+				res.send({
+					success:false,
+					msg:"电影类型订阅失败!"
+				});
+			}
+		})
+	}else if(data.id === "order-minus"){ // minus
+		User.minusOrder(uId,category,function(err,ok){
+			if(err){
+				return console.log(err);
+			}
+			if(ok){
+				req.session.user = user;
+				res.send({
+					success:true,
+					msg:"电影类型退订成功!"
+				});
+			}else{
+				res.send({
+					success:false,
+					msg:"电影类型退订失败!"
+				});
+			}
+		})
+	}else{
+		res.send({
+			msg:"操作失败，请稍后重试!"
+		});
+	}
+});
+// 用户订阅电影页面
+router.get('/user/order',function(req,res){
+	var u_id = req.query.uId;
+	User.getOrders(u_id,function(err,categories,user){
+		req.session.user = user;
+		res.render('orders',{
+			title:"用户订阅",
+			currentuser:user,
+			categories:categories
+		});
+	})
+});
+
+
 // 用户登录成功现实页面
 // router.get('/signup',function(req,res){
 // 	var user = req.session.user;
