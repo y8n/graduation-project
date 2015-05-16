@@ -2,6 +2,11 @@ extends ../layout
 
 block content
   .container
+    form(method="get",action="/results",style="top:-50px;position:relative")
+      .input-group.col-sm-3.pull-right
+        input.form-control(type="text",name="q",placeholder='请输入搜索电影关键词')
+        span.input-group-btn
+          button.btn.btn-primary(type="submit") 搜索
     .row
       .panel.panel-default
         .panel-heading

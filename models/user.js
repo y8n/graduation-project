@@ -249,7 +249,19 @@ User.addOrderMovie = function(user_id,movie_id,callback){
 		})
 	});
 }
-
+// 搜索用户
+User.search = function(name,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		var reg = new RegExp(name,'ig');
+		users.find({username:reg}).toArray(function(err,users){
+			if(err){
+				return callback(err);
+			}
+			callback(err,users)
+		})
+	});
+}
 
 
 

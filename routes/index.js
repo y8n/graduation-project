@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router(),
 	Category = require('../models/category'),
-	Movie = require('../models/movie');
+    Movie = require('../models/movie'),
+	User = require('../models/user');
 
 
 // index page
@@ -35,22 +36,52 @@ router.get('/results',function(req,res){
             })
         })
     }else if(q && q != ''){ // 显示用户搜索结果
-        Movie.search(q,function(err,movies){
-            if(err){
-                return console.error(err);
-            }
-            var len = movies.length;
-            var result = movies.splice(index,count);
-            res.render('results',{
-                search:true,
-                title:'电影搜索结果',
-                keyword:q,
-                query:'q='+q,
-                currentPage:page,
-                totalPage:Math.ceil(len/count),
-                movies:result
+        if(req.query.u_list){
+            User.search(q,function(err,users){
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                var len = users.length;
+                var results = users.splice(index, count);
+                res.render('userlist', {
+                    title: '用户列表',
+                    users: results,
+                    currentPage: page,
+                    totalPage: Math.ceil(len / count)
+                });
             })
-        })  
+        }else{
+            Movie.search(q,function(err,movies){
+                if(err){
+                    return console.error(err);
+                }
+                var len = movies.length;
+                var result = movies.splice(index,count);
+                if(req.query.m_list){ //list列表显示
+                    res.render('movielist',{
+                        search:true,
+                        title:'电影搜索结果',
+                        keyword:q,
+                        query:'q='+q,
+                        currentPage:page,
+                        totalPage:Math.ceil(len/count),
+                        movies:result
+                    })
+                }else{ // 非列表显示
+                    res.render('results',{
+                        search:true,
+                        title:'电影搜索结果',
+                        keyword:q,
+                        query:'q='+q,
+                        currentPage:page,
+                        totalPage:Math.ceil(len/count),
+                        movies:result
+                    })
+                }
+            })  
+
+        }
     }else{ //请求不符合条件
         var temp = '';
         for(var i in req.query){
