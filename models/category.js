@@ -127,47 +127,6 @@ Category.removeMovie = function removeMovie(oldCategory,movieId,callback){
 		});
 	});	
 }
-/*
-// 添加新的电影类别
-Category.saveCategory = function saveCategory(category,callback){
-	DB.open(function(err,db){
-		if(err){
-			return callback(err);
-		}
-		db.collection('movie_categories',function(err,collection){
-			if(err){
-				DB.close();
-				return callback(err);
-			}
-			collection.findOne({name:category},function(err,doc){
-				if(doc){
-					DB.close();
-					callback(err,null)
-				}else{
-					collection.save({name:category},function(err,category){
-						if(err){
-							console.log(err);return;
-						}
-						DB.close();
-						callback(err,category);
-					})
-				}
-			})
-		});
-	});
-}
-// 获取所有现有的类别
-Category.findAllCategory = function findAllCategory(callback){
-	MongoClient.connect(url,function(err,db){
-		if(err) return callback(err);
-		db.collection('movie_categories').find({}).toArray(function(err,categories){
-			db.close();
-			if(err) return console.log(err);
-			callback(err,categories);
-		});
-	})
-}
-*/
 
 
 

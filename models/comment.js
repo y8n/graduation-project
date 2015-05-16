@@ -85,63 +85,6 @@ Comment.findAllByMoiveId = function findAllByMoiveId(id,callback){
 
 		});
 	});
-	/*DB.open(function(err,db){
-		if(err){
-			return callback(err);
-		}
-		db.collection('comments',function(err,collection){
-			if(err){
-				DB.close();
-				return callback(err);
-			}
-			collection.find({movieId:mongodb.ObjectID(id)}).toArray(function(err,comments){
-				if(comments){
-					var _comments = [];
-					;(function iterator(i){
-						if(i == comments.length){
-							DB.close();
-							callback(err,_comments);
-							return;
-						};
-						var comment = comments[i];
-						var _comment = {
-							_id:comment._id,
-							content:comment.content
-						}
-						var _reply = [];
-						db.collection('users',function(err,collection){
-							collection.findOne({_id:mongodb.ObjectID(comment.from)},function(err,from){
-								_comment.from = from;
-								;(function iterator2(j){
-									if(j == comment.reply.length){
-										_comment.reply = _reply;
-										_comments.push(_comment);
-										iterator(++i);
-									}else{
-										var __reply = {
-											content:comment.reply[j].content
-										};
-										collection.findOne({_id:mongodb.ObjectID(comment.reply[j].from)},function(err,from){
-											__reply.from = from;
-											collection.findOne({_id:mongodb.ObjectID(comment.reply[j].to)},function(err,to){
-												//console.log(to)
-												__reply.to = to;
-												_reply.push(__reply);
-												iterator2(++j);
-											})
-										})
-									}
-								})(0)
-							})
-						})
-					})(0);
-				}else{
-					DB.close();
-					callback(err,null);
-				}
-			});
-		});
-	});*/
 }
 // 获取指定ID的评论
 Comment.findById = function findById(id,callback){
@@ -168,32 +111,6 @@ Comment.addReply = function addReply(comment,reply,callback){
 						callback(err,reply);
 					});
 				})
-				// comment.reply.push(reply);
-				// console.log(reply);
-				// var _comment = {
-				// 	_id:comment._id,
-				// 	content:comment.content
-				// }
-				// var _reply = [];
-				// var reply = comment.reply;
-				// (function iterator(i){
-				// 	if(i >= reply.length){
-				// 		_comment.reply = _reply;
-				// 		callback(err,_comment);
-				// 	}else{
-				// 		var __reply = {
-				// 			content:reply[i].content
-				// 		};
-				// 		User.findById(reply[i].from,function(err,from){
-				// 			__reply.from = from;
-				// 			User.findById(reply[i].from,function(err,from){
-				// 				__reply.to = to;
-				// 				_reply.push(__reply);
-				// 				iterator(++i);
-				// 			});
-				// 		})
-				// 	}
-				// })(0);
 			}else {
 				callback(err,null);
 			}
