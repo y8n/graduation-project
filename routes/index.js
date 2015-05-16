@@ -15,20 +15,20 @@ router.get('/', function(req, res) {
 });
 // 根据GET请求分页显示不同类型的电影
 router.get('/results',function(req,res){
-    var catId = req.query.cat;
+    var catName = req.query.cat;
     var q = req.query.q;
     var count = 10;
     var page = req.query.p || 1;
     var index = (page-1) * count;
     // 显示某一类型的电影
-    if(catId){
-        Category.findById(catId,function(err,category){
+    if(catName){
+        Category.findByName(catName,function(err,category){
             var len = category.movies.length;
             var result = category.movies.splice(index,count);
             res.render('results',{
                 title:'分类显示电影列表',
                 keyword:category.name,
-                query:'cat='+category._id,
+                query:'cat='+category.name,
                 currentPage:page,
                 totalPage:Math.ceil(len/count),
                 movies:result

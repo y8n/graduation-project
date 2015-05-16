@@ -9,7 +9,7 @@ block content
           .panel.panel-default(id="#{cat.name}")
             .panel-heading
               h3 
-                a(href="/results?cat=#{cat._id}&p=1") #{cat.name}
+                a(href="/results?cat=#{cat.name}&p=1") #{cat.name}
             .panel-body
               div(style="margin-left:20px;")
                 each item in cat.movies

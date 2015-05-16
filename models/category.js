@@ -44,11 +44,11 @@ Category.save = function(movie,callback){
 	});
 }
 // 获取指定ID的电影类型集合
-Category.findById = function findById(id,callback){
+Category.findByName = function findByName(name,callback){
 	MongoClient.connect(url,function(err,db){
 		var categories = db.collection('categories');
 		var movies = db.collection('movies');
-		categories.findOne({_id:ObjectID(id)},function(err,category){
+		categories.findOne({name:name},function(err,category){
 			var _movies = [];
 			(function iterator(j){
 				if(j == category.movies.length){
