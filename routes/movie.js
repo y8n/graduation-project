@@ -26,7 +26,7 @@ router.get('/m/:id', function(req, res) {
 				title: "电影详情页"
 			})
 		}
-	})
+	},true);
 });
 
 var HOT_MOVIES;

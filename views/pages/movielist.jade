@@ -9,10 +9,12 @@ block content
             tr
               th.col-sm-1 电影名字
               th.col-sm-1 导演
-              th.col-sm-3 主演
+              th.col-sm-2 主演
               th.col-sm-1 国家
               th.col-sm-1 上映时间
               th.col-sm-1 电影类型
+              th.col-sm-1 影评得分
+              th.col-sm-1 访问次数
               th.col-sm-1 上传用户
               th.col-sm-1 查看
               th.col-sm-1 更新
@@ -26,6 +28,11 @@ block content
                 td #{item.country}
                 td #{item.year}
                 td #{item.category}
+                td #{item.score}
+                - if(item.VV)
+                  td #{item.VV}
+                - else
+                  td 0
                 td 
                   a(target="_blank",href="/u/#{item.user}") #{item.user}
                 td: a(target="_blank",href="/m/#{item._id}") 查看

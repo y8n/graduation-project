@@ -15,8 +15,9 @@ function Movie(movie) {
 	this.summary = movie.summary;
 	this.category = movie.category;
 	this.year = movie.year;
-	this.score = 5
-	this.user = movie.user_id
+	this.score = 5;
+	this.user = movie.user_id;
+	this.VV = 0;
 }
 
 module.exports = Movie;
@@ -38,7 +39,8 @@ Movie.prototype.save = function(callback) {
 		category: this.category,
 		year: this.year,
 		score:this.score,
-		user:this.user
+		user:this.user,
+		VV:this.VV
 	}
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
@@ -55,7 +57,7 @@ Movie.prototype.save = function(callback) {
  * callback(err,movie)
  * movie 查找的电影信息
  */
-Movie.findById = function (id,callback){
+Movie.findById = function (id,callback,count){
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
 		try{
@@ -64,9 +66,24 @@ Movie.findById = function (id,callback){
 			return callback(false,null);
 		}
 		movies.find({_id:ObjectID(id)}).toArray(function(err,doc){
-			db.close();
 			if(err) return callback(err);
-			callback(err,doc[0]);
+			// 如果是需要统计访问次数的话
+			if(count){
+				var vv;
+				if(doc[0].VV){
+					vv = doc[0].VV +1;
+				}else{
+					vv = 1;
+				}
+				movies.update({_id:ObjectID(id)},{$set:{VV:vv}},function(err){
+					if(err){
+						return callback(err);
+					}
+					callback(err,doc[0]);
+				})
+			}else{
+				callback(err,doc[0]);
+			}
 		})
 	});
 }
