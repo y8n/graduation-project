@@ -49,7 +49,7 @@ MongoClient.connect(url, function(err, db){
     if(err) return console.error(err);
     console.log('connect mongodb success');
     app.database = db;
-    app.listen(port);
+    app.listen(port,'0.0.0.0');
     console.log('Server listen on '+port);
     // require("child_process").exec('open "http://localhost:3000"');
 });
