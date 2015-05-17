@@ -297,7 +297,6 @@ router.post('/movie/score', function(req, res) {
 				msg: '用户已经评论过该电影，不能重复评论!'
 			});
 		} else if (success) {
-			req.session.user = user;
 			res.send({
 				success: true,
 				msg: '评分成功，感谢支持!',

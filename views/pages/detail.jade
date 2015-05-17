@@ -76,7 +76,7 @@ block content
                   label(for="scoreInput") 滑动评分
                   input#scoreInput(type="range",onChange="changeScore(this)",defaultValue="5",min="0",max="10",name="score")
                   span &nbsp;&nbsp;&nbsp;
-                  span.score.text-info 5
+                  span.score.text-info #{movie.score}
                   span 分
                 if user 
                   button.btn-score.btn.btn-primary(type="button",onClick="doScore(this)") 打分

@@ -15,7 +15,6 @@ block content
             tr
               th.col-sm-2 用户名
               th.col-sm-2 用户权限
-              th.col-sm-2 用户积分
               th.col-sm-2 上次登录时间
               th.col-sm-2 修改权限
               th.col-sm-2 删除
@@ -29,7 +28,6 @@ block content
                   td.text-danger VIP用户
                 else 
                   td 管理员
-                td #{user.score}
                 - if(user.lastSignin)
                   td #{user.lastSignin}
                 - else

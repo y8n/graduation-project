@@ -10,7 +10,6 @@ function User (user){
 	this.username = user.username;
 	this.password = user.password;
 	this.role = user.role || 3; // 3-normal user,2-vip user,1-admin
-	this.score = user.score || 0 ;
 	this.avatar = "/images/avatar-default.svg"; 
 }
 
@@ -26,7 +25,6 @@ User.prototype.save = function(callback){
 		username : this.username,
 		password : password,
 		role : this.role,
-		score  :this.score,
 		avatar: this.avatar
 	}
 	MongoClient.connect(url,function(err,db){
