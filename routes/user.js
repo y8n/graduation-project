@@ -131,8 +131,7 @@ router.post('/user/signup', function(req, res) {
 			req.session.user = user; //直接登录
 			res.send({
 				success: true,
-				msg: '注册成功！',
-				pathname: req.session.preUrl[1]
+				msg: '注册成功！'
 			});
 		}
 	});
@@ -161,7 +160,6 @@ router.post('/user/signin', function(req, res) {
 					if(ok){
 						res.send({
 							success: true,
-							pathname: req.session.preUrl[1]
 						})
 					}else{
 						res.send({

@@ -67,7 +67,7 @@ $(function(){
 				success:function(data){
 					if(data.success){
 						$('#signinModal').hide();
-						window.location = window.location.origin+data.pathname;
+						window.location = '/';
 					}else if(data.freeze){
 						alert("您已被冻结，请联系管理员!");
 					}else{

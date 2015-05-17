@@ -7,8 +7,9 @@
         ul.nav.navbar-nav
           li
             a(href="/") 首页
-          li
-            a(href="/movie/new") 添加新电影
+          if user
+            li
+              a(href="/movie/new") 添加新电影
           if user && user.role === 2
             li
               a(href="/user/order?uId=#{user._id}") 我的订阅
