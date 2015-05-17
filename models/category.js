@@ -116,6 +116,7 @@ Category.removeMovie = function removeMovie(oldCategory,movieId,callback){
 					if((category.movies[j]+'') == (movieId+'')){
 						category.movies.splice(j,1);
 						categories.update({name:oldCategory},{$set:{movies:category.movies}},function(err,doc){
+							db.close();
 							if(doc.result.ok === 1 && doc.result.n ===1)
 								callback(err,doc);						
 						})

@@ -105,6 +105,7 @@ User.lastSignin = function(id,callback){
 			second = time.getSeconds(),
 			fulltime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
 		users.update({_id:ObjectID(id)},{$set:{lastSignin:fulltime}},function(err,doc){
+			db.close();
 			if(err){
 				return callback(err);
 			}
@@ -124,6 +125,7 @@ User.setting = function(username,options,callback){
 			if(err) return callback(err);
 			var users = USER_COLLECTION || db.collection('users');
 			users.update({username:username},{$set:options},function(err,doc){
+				db.close();
 				if(err) callback(err);
 				callback(err,doc);
 			})
@@ -141,6 +143,7 @@ User.changePassword = function(username,oldpwd,newpwd,callback){
 				if(err) return callback(err);
 				var users = USER_COLLECTION || db.collection('users');
 				users.update({username:username},{$set:{password:_password}},function(err,doc){
+					db.close();
 					if(err) callback(err);
 					callback(err,user);
 				})
@@ -282,6 +285,7 @@ User.search = function(name,callback){
 		var users = USER_COLLECTION || db.collection('users');
 		var reg = new RegExp(name,'ig');
 		users.find({username:reg}).toArray(function(err,users){
+			db.close();
 			if(err){
 				return callback(err);
 			}

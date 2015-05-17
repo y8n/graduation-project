@@ -103,6 +103,7 @@ Comment.addReply = function addReply(comment,reply,callback){
 		var _reply = comment.reply;
 		_reply.push(reply);
 		comments.update({_id:ObjectID(comment._id)},{$set:{reply:_reply}},function(err,doc){
+			db.close();
 			if(doc.result.ok ===1){
 				User.findById(reply.from,function(err,from){
 					reply.from = from;
@@ -122,6 +123,7 @@ Comment.removeByMId = function(id,callback){
 	MongoClient.connect(url,function(err,db){
 		var comments = COMMENT_COLLECTION || db.collection('comments');
 		comments.remove({movieId:ObjectID(id)},function(err,doc){
+			db.close();
 			if(err){
 				return callback(err);
 			}

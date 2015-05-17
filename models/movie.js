@@ -45,6 +45,7 @@ Movie.prototype.save = function(callback) {
 	MongoClient.connect(url,function(err,db){
 		var movies = db.collection('movies');
 		movies.insert(_movie,function(err,doc){
+			db.close();
 			if(err) return callback(err);
 			var movie = doc.ops[0];
 			Category.save(movie,function(){
@@ -77,6 +78,7 @@ Movie.findById = function (id,callback,count){
 					vv = 1;
 				}
 				movies.update({_id:ObjectID(id)},{$set:{VV:vv}},function(err){
+					db.close();
 					if(err){
 						return callback(err);
 					}
@@ -115,6 +117,7 @@ Movie.removeById = function(id,categories,callback){
 		var movies = db.collection('movies');
 		// 删除movies collection 中的
 		movies.remove({_id:ObjectID(id)},function(err,DOC){
+			db.close();
 			if(err) return callback(err);
 			// 删除电影类别里的
 			(function it(n){
@@ -166,9 +169,9 @@ Movie.prototype.update = function update(id,callback){
 	}
 	MongoClient.connect(url,function(err,db){
 		db.collection('movies').update({_id:ObjectID(id)},{$set:_movie},function(err,doc){
+			db.close();
 			if(doc.result.ok ===1 && doc.result.n ===1){
 				_movie._id = id;
-				console.log(_movie)
 				Category.save(_movie,function(err,movie){
 					callback(err,_movie);
 				})
@@ -194,6 +197,7 @@ Movie.addScore = function(id,userId,score,callback){
 		score = (movie.score+score)/2;
 		MongoClient.connect(url,function(err,db){
 			db.collection('movies').update({_id:ObjectID(id)},{$set:{scores:scores,score:Math.round(score)}},function(err,doc){
+				db.close();
 				if(doc.result.ok ===1 && doc.result.n ===1){
 					callback(err,false,true,Math.round(score));
 				}else{
