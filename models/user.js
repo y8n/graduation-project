@@ -262,8 +262,48 @@ User.search = function(name,callback){
 		})
 	});
 }
+// 申请VIP
+User.getVIP = function(id,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		User.findById(id,function(err,user){
+			user.role = 2;
+			users.update({_id:ObjectID(id)},{$set:{role:user.role}},function(err,doc){
+				db.close();
+				if(err){
+					return callback(err);
+				}
+				if(doc.result.ok && doc.result.nModified >0){
+					callback(err,true,user);
+				}else{
+					callback(err,false,user);
+				}
 
+			})
+		})
+	});
+}
+// 取消VIP
+User.cancelVIP = function(id,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		User.findById(id,function(err,user){
+			user.role = 3;
+			users.update({_id:ObjectID(id)},{$set:{role:user.role}},function(err,doc){
+				db.close();
+				if(err){
+					return callback(err);
+				}
+				if(doc.result.ok && doc.result.nModified >0){
+					callback(err,true,user);
+				}else{
+					callback(err,false,user);
+				}
 
+			})
+		})
+	});
+}
 
 
 

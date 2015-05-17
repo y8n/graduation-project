@@ -202,7 +202,7 @@ router.post('/u/order',function(req,res){
 			}
 		})
 	}else if(data.id === "order-minus"){ // minus
-		User.minusOrder(uId,category,function(err,ok){
+		User.minusOrder(uId,category,function(err,ok,user){
 			if(err){
 				return console.log(err);
 			}
@@ -237,7 +237,53 @@ router.get('/user/order',function(req,res){
 		});
 	})
 });
-
+// VIP管理
+router.post('/user/vip',function(req,res){
+	var data = req.body;
+	var uId = data.uId;
+	var id = data.id;
+	if(id === 'getVIP'){
+		User.getVIP(uId,function(err,ok,user){
+			if(err){
+				return console.log(err);
+			}
+			if(ok){
+				req.session.user = user;
+				res.send({
+					success:true,
+					msg:"申请VIP成功!"
+				});
+			}else{
+				res.send({
+					success:false,
+					msg:"申请VIP失败!"
+				});
+			}
+		})
+	}else if(id === 'cancelVIP'){
+		User.cancelVIP(uId,function(err,ok,user){
+			if(err){
+				return console.log(err);
+			}
+			if(ok){
+				req.session.user = user;
+				res.send({
+					success:true,
+					msg:"取消VIP成功"
+				});
+			}else{
+				res.send({
+					success:false,
+					msg:"取消VIP失败!"
+				});
+			}
+		})
+	}else{
+		res.send({
+			msg:"操作失败，请稍后重试!"
+		});
+	}
+})
 
 // 用户登录成功现实页面
 // router.get('/signup',function(req,res){

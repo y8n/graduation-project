@@ -136,4 +136,40 @@ $(function(){
 			});
 		})
 	}
+	var vip = $('.vip');
+	if(vip.length > 0){
+		vip.click(function(){
+			var target = $(this);
+			var id = target[0].id
+			var u_id = target.data('u_id');
+			$.ajax({
+				url:'/user/vip',
+				method:'post',
+				data:{uId:u_id,id:id},
+				dataType:'JSON',
+				success:function(result){
+					if(id === 'getVIP'){
+						target.removeClass('btn-success').addClass('btn-warning').text('取消VIP权限')[0].id = "cancelVIP";
+						var html = [
+							'<li>',
+								'<a href="/user/order?uId='+u_id+'">我的订阅</a>',
+							'</li>'	
+						].join('');
+						$nav.append($(html));
+						$('#tab3').removeClass('hide')
+						$('ul.nav-tabs').children().eq(2).show();
+					}else if(id === 'cancelVIP'){
+						target.removeClass('btn-warning').addClass('btn-success').text('申请VIP权限')[0].id = "getVIP";
+						$nav.children().eq(2).remove();
+						$('#tab3').addClass('hide')
+						$('ul.nav-tabs').children().eq(2).hide();
+					}
+					alert(result.msg);
+				},
+				error:function(result){
+					alert("操作失败！");
+				}
+			});
+		});
+	}
 });

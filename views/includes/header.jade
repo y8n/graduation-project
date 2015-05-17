@@ -12,7 +12,7 @@
           if user && user.role === 2
             li
               a(href="/user/order?uId=#{user._id}") 我的订阅
-              if user.orderMovies.length >0
+              if user.orderMovies && user.orderMovies.length >0
                 .red-point
           if user && user.role === 1
             li

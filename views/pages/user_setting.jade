@@ -11,8 +11,12 @@ block content
         - if(currentuser.role === 2)
           li
             a(href="#tab3",data-toggle="tab") 订阅管理
-        //- li
-        //-   a(href="#tab4",data-toggle="tab") 订阅管理
+        - else
+          li(style="display:none")
+            a(href="#tab3",data-toggle="tab") 订阅管理
+        - if(currentuser.role > 1)
+          li
+            a(href="#tab4",data-toggle="tab") 权限申请
       br
       .tab-content
         #tab1.tab-pane.active 
@@ -76,7 +80,7 @@ block content
                   button.btn.btn-warning(type="reset") 重置
                 .col-sm-2
                   button.btn.btn-success(type="submit") 保存              
-        - if(currentuser.role === 2)
+        - if(currentuser.role === 2) // VIP用户
           - var cats = {"动作":"/images/categories/action.jpg","动画":"/images/categories/animation.jpg","喜剧":"/images/categories/comedy.jpg","犯罪":"/images/categories/crime.jpg","剧情":"/images/categories/drama.jpg","爱情":"/images/categories/love.jpg","奇幻":"/images/categories/magic.jpg","科幻":"/images/categories/science.jpg","惊悚":"/images/categories/thriller.jpg","战争":"/images/categories/war.jpg"}
           #tab3.tab-pane
             - for(var cat in cats)
@@ -93,8 +97,30 @@ block content
                   - else
                     button.btn.btn-success.order#order-add(data-u_id="#{currentuser._id}",data-cat="#{cat}")
                       span.glyphicon.glyphicon-plus
+                      spen.text 订阅 
+          #tab4.tab-pane              
+            button.btn.btn-warning.vip#cancelVIP(data-u_id="#{currentuser._id}") 取消VIP权限
+        - else // 非VIP
+          - var cats = {"动作":"/images/categories/action.jpg","动画":"/images/categories/animation.jpg","喜剧":"/images/categories/comedy.jpg","犯罪":"/images/categories/crime.jpg","剧情":"/images/categories/drama.jpg","爱情":"/images/categories/love.jpg","奇幻":"/images/categories/magic.jpg","科幻":"/images/categories/science.jpg","惊悚":"/images/categories/thriller.jpg","战争":"/images/categories/war.jpg"}
+          #tab3.tab-pane.hide
+            - for(var cat in cats)
+              .panel.panel-default.movie-order.pull-left
+                .panel-heading.text-center 
+                  h4 #{cat}
+                .panel-body
+                  img.thumbnail(src="#{cats[cat]}",alt="#{cat}电影订阅")
+                .panel-footer
+                  - if(currentuser.orders && currentuser.orders.indexOf(cat) !== -1)
+                    button.btn.btn-warning.order#order-minus(data-u_id="#{currentuser._id}",data-cat="#{cat}")
+                      span.glyphicon.glyphicon-minus
+                      spen.text 退订   
+                  - else
+                    button.btn.btn-success.order#order-add(data-u_id="#{currentuser._id}",data-cat="#{cat}")
+                      span.glyphicon.glyphicon-plus
                       spen.text 订阅    
-
+        - if(currentuser.role === 3) // 普通用户
+          #tab4.tab-pane              
+            button.btn.btn-success.vip#getVIP(data-u_id="#{currentuser._id}") 申请VIP权限
         
 
     #setting_message.modal
