@@ -9,15 +9,15 @@ block content
         span.input-group-btn
           button.btn.btn-primary(type="submit") 搜索
     .row
-      div(style="height:345px")
+      div(style="height:400px")
         table.table.table-hover.table-bordered
           thead
             tr
-              th.col-sm-2 名字
+              th.col-sm-2 用户名
               th.col-sm-2 用户权限
               th.col-sm-2 用户积分
-              th.col-sm-2 查看
-              th.col-sm-2 更新
+              th.col-sm-2 上次登录时间
+              th.col-sm-2 修改权限
               th.col-sm-2 删除
           tbody
             each user in users
@@ -30,10 +30,26 @@ block content
                 else 
                   td 管理员
                 td #{user.score}
-                td: a(target="_blank",href="javascript:void(0)") 查看
-                td: a(target="_blank",href="../user/update/#{user._id}") 修改
+                - if(user.lastSignin)
+                  td #{user.lastSignin}
+                - else
+                  td 无
                 td
-                  button.btn.btn-danger.del(type="button",data-id="#{user._id}") 删除
+                  .btn-group
+                    button.btn.btn-primary.dropdown-toggle(type="button",data-toggle="dropdown",aria-expanded="false") 修改权限
+                      span.caret
+                    ul.dropdown-menu(role="menu")
+                      li
+                        a.changeRole(href="javascript:void(0)",data-uid="#{user._id}",data-role="3") 普通用户
+                      li
+                        a.changeRole(href="javascript:void(0)",data-uid="#{user._id}",data-role="2") VIP用户
+                      li
+                        a.changeRole(href="javascript:void(0)",data-uid="#{user._id}",data-role="1") 管理员   
+                td
+                  - if(user.freeze)
+                    button.btn.btn-danger.freeze#cancelFreeze(type="button",data-id="#{user._id}") 解除冻结
+                  - else 
+                    button.btn.btn-success.freeze#toFreeze(type="button",data-id="#{user._id}") 冻结用户
       ul.pagination.panel-pagination.pull-right
         - for (var i =1;i<=totalPage;i++){
         -   if(currentPage == i){

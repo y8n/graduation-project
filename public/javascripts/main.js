@@ -42,6 +42,14 @@ $(function(){
 			});
 		}
 	});
+	$('.logout').click(function(){
+		$.post('/logout',function(data){
+			if(data.success){
+				alert('登出成功');
+				window.location='/'
+			}
+		});
+	})
 	$('#signinbtn').click(function(){
 		var target = $(this);
 		var $form = $('#signinModal form');
@@ -60,6 +68,8 @@ $(function(){
 					if(data.success){
 						$('#signinModal').hide();
 						window.location = window.location.origin+data.pathname;
+					}else if(data.freeze){
+						alert("您已被冻结，请联系管理员!");
 					}else{
 						$alert.text('用户名或密码错误').show();
 					}
@@ -141,7 +151,7 @@ $(function(){
 		vip.click(function(){
 			var target = $(this);
 			var id = target[0].id
-			var u_id = target.data('u_id');
+			var u_id = target.data('u_id'); "添加权限申请和取消"
 			$.ajax({
 				url:'/user/vip',
 				method:'post',
@@ -172,4 +182,44 @@ $(function(){
 			});
 		});
 	}
+	var changeRole = $('.changeRole');
+	if(changeRole.length > 0){
+		changeRole.click(function(){
+			var target = $(this);
+			var u_id = target.data('uid');
+			var role = target.data('role');
+			$.ajax({
+				url:'/admin/changerole',
+				method:'post',
+				data:{uId:u_id,role:role},
+				dataType:'JSON',
+				success:function(result){
+					alert(result.msg);
+					window.location.reload();
+				},
+				error:function(){
+					alert('操作失败!')
+				}
+			});
+		})
+	}
+	var freeze = $('.freeze');
+	freeze.click(function(){
+		var target = $(this);
+		var isFreeze = target[0].id;
+		var u_id = target.data('id');
+		$.ajax({
+			url:'/admin/freeze',
+			method:'post',
+			data:{uId:u_id,isFreeze:isFreeze},
+			dataType:'JSON',
+			success:function(result){
+				alert(result.msg);
+				window.location.reload();
+			},
+			error:function(){
+				alert('操作失败!')
+			}
+		});
+	})
 });

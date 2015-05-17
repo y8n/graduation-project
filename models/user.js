@@ -93,6 +93,31 @@ User.findAll = function findAll(callback){
 		})
 	});
 }
+// 设置用户最近登录时间
+User.lastSignin = function(id,callback){
+	MongoClient.connect(url,function(err,db){
+		if(err) return callback(err);
+		var users = USER_COLLECTION || db.collection('users');
+		var time = new Date(),
+			year = time.getFullYear(),
+			month = time.getMonth()+1,
+			day = time.getDate(),
+			hour = time.getHours(),
+			minute = time.getMinutes(),
+			second = time.getSeconds(),
+			fulltime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
+		users.update({_id:ObjectID(id)},{$set:{lastSignin:fulltime}},function(err,doc){
+			if(err){
+				return callback(err);
+			}
+			if(doc.result.ok === 1 && doc.result.nModified === 1){
+				callback(err,true);
+			}else{
+				callback(err,false);
+			}
+		});
+	});
+}
 // 用户基本信息设置
 User.setting = function(username,options,callback){
 	User.findByName(username,function(err,user){
@@ -145,7 +170,11 @@ User.addOrder = function(id,category,callback){
 	MongoClient.connect(url,function(err,db){
 		var users = USER_COLLECTION || db.collection('users');
 		User.findById(id,function(err,user){
-			user.orders.push(category);
+			if(user.orders){
+				user.orders.push(category);
+			}else{
+				user.orders = [category];
+			}
 			users.update({_id:ObjectID(id)},{$set:{orders:user.orders}},function(err,doc){
 				db.close();
 				if(err){
@@ -304,8 +333,55 @@ User.cancelVIP = function(id,callback){
 		})
 	});
 }
+// 用户修改权限
+User.changeRole = function(id,role,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		User.findById(id,function(err,user){
+			users.update({_id:ObjectID(id)},{$set:{role:role}},function(err,doc){
+				db.close();
+				if(err){
+					return callback(err);
+				}
+				if(doc.result.ok){
+					callback(err,true,user);
+				}else{
+					callback(err,false,user);
+				}
 
+			})
+		})
+	});
+}
+// 管理员冻结和解冻用户
+User.freeze = function(id,isFreeze,callback){
+	MongoClient.connect(url,function(err,db){
+		var users = USER_COLLECTION || db.collection('users');
+		User.findById(id,function(err,user){
+			var temp = false,msg='';
+			console.log(isFreeze)
+			if(isFreeze){
+				temp = false;
+				msg = "用户已解除冻结状态";
+			}else{
+				temp = true;
+				msg = "用户已被冻结";
+			}
+			users.update({_id:ObjectID(id)},{$set:{freeze:temp}},function(err,doc){
+				db.close();
+				if(err){
+					return callback(err);
+				}
+				if(doc.result.ok){
+					callback(err,true,msg);
+				}else{
+					callback(err,false,msg);
+				}
 
+			})
+		})
+	});
+}
 
 
 

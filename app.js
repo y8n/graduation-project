@@ -57,12 +57,12 @@ MongoClient.connect(url, function(err, db){
 app.use(function(req,res,next){
     var user = req.session.user;
     // 记录用户最近5次的浏览记录
-    if(req.session.preUrl){
+    if(req.session.preUrl && req.method==="GET"){
         req.session.preUrl.unshift(req.url);
         if(req.session.preUrl.length > 5){
             req.session.preUrl.pop();
         }
-    }else{ 
+    }else if(req.method==="GET"){ 
         req.session.preUrl = [req.url];
     }
     if(user){

@@ -150,11 +150,26 @@ router.post('/user/signin', function(req, res) {
 		}
 		if (isMatch) {
 			console.log('Signin success');
-			req.session.user = user;
-			res.send({
-				success: true,
-				pathname: req.session.preUrl[1]
-			})
+			if(user.freeze){
+				res.send({
+					success: false,
+					freeze:true
+				})
+			}else{
+				req.session.user = user;
+				User.lastSignin(user._id,function(err,ok){
+					if(ok){
+						res.send({
+							success: true,
+							pathname: req.session.preUrl[1]
+						})
+					}else{
+						res.send({
+							success: false
+						});
+					}
+				})
+			}
 		} else {
 			res.send({
 				success: false
@@ -163,9 +178,12 @@ router.post('/user/signin', function(req, res) {
 	})
 });
 // 用户登出
-router.get('/logout', function(req, res) {
+router.post('/logout', function(req, res) {
 	delete req.session.user;
-	res.redirect('/');
+	console.log('logout success')
+	res.send({
+		success:true
+	})
 });
 
 // 用户登录成功现实页面
@@ -284,7 +302,42 @@ router.post('/user/vip',function(req,res){
 		});
 	}
 })
-
+// 管理员修改用户权限
+router.post('/admin/changerole',function(req,res){
+	var uId = req.body.uId;
+	var role = req.body.role;
+	User.changeRole(uId,role,function(err,ok,user){
+		if(ok){
+			res.send({
+				success:true,
+				msg:'修改成功'
+			})
+		}else{
+			res.send({
+				success:false,
+				msg:'修改失败'
+			})
+		}
+	})
+});
+// 管理员冻结用户
+router.post('/admin/freeze',function(req,res){
+	var uId = req.body.uId;
+	var isFreeze = req.body.isFreeze==='cancelFreeze'?true:false;
+	User.freeze(uId,isFreeze,function(err,ok,msg){
+		if(ok){
+			res.send({
+				success:true,
+				msg:msg
+			})
+		}else{
+			res.send({
+				success:false,
+				msg:'修改失败2'
+			})
+		}
+	})
+});
 // 用户登录成功现实页面
 // router.get('/signup',function(req,res){
 // 	var user = req.session.user;
